@@ -2,12 +2,12 @@
 <!-- no template required, because chartJS is going to create the template for us automatically -->
 
 <script>
-    import { Line, mixins } from 'vue-chartjs';
+    import { Bar, mixins } from 'vue-chartjs';
 
     let { reactiveProp } = mixins;
 
     export default {
-        extends: Line,                  // type of chart
+        extends: Bar,                   // type of chart
 
         name: "ActivityChart",          // name of this component
 
@@ -17,9 +17,10 @@
             return {
                 chartOptions: {
                     scales: {
-                        xAxes: [{
-                            type: 'time',
-                            distribution: 'linear'      // space out in time
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true           // this is for the scale to begin at 0
+                            }
                         }]
                     }
                 }

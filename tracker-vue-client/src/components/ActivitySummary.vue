@@ -24,8 +24,10 @@
                 <br><hr>
 
                 <!-- ASK PROF: Should this heading be here or in ActivityChart.vue? -->
-                <h4 class="card-subtitle text-muted">Activity Growth Charts</h4>
-                <activity-chart v-bind:chartData="chartData"></activity-chart>
+                <h4 class="card-subtitle text-muted">Activity Growth Charts</h4><br>
+                <div class="chartSize">
+                    <activity-chart v-bind:chartData="chartData"></activity-chart>
+                </div>
           </div>
       </div>          <!-- END of the activity summary section -->
     </div>
@@ -125,18 +127,26 @@
                 return arrayOfObjects;
             },                                      // END of the totalHoursForEachActivityRecord inside computed
             chartData() {
-                let activityLabels = this.activityRecords.map( rec => rec.type );       // all the types
-                let activityHours = this.activityRecords.map( rec => rec.hours );       // all the hours
+                let colors = ["orchid", "teal", "yellowgreen", ];
+                let activityArray = this.totalHoursForEachActivityRecord;
+
+                // create 2 empty arrays for the activity type and activity hours
+                let activityTypeNames = [];
+                let activityNumHours = [];
+
+                // add each activity type name and each activity total hours to its respective arrays
+                activityArray.forEach(function (eachActivity) {
+                    activityTypeNames.push(eachActivity.typeOfActivity);
+                    activityNumHours.push(eachActivity.numOfHours);
+                })
 
                 // return data in format expected by chartJS
                 return {
-                    labels: activityLabels,
+                    labels: activityTypeNames,                    // this is the array value
                     datasets: [{
-                        label: 'Height for Activity Hours',
-                        data: activityHours,
-                        borderColor: 'red',
-                        fill: true,                 // optional
-                        lineTension: 0.1            // 0 = straight lines between points, 1 = bezier curves
+                        label:"Practice hours for Activities",
+                        data: activityNumHours,                   // this is an array value
+                        backgroundColor: colors                   // this is an array value
                     }]
                 }
             }                                       // END of chartData inside computed
@@ -147,5 +157,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    .chartSize
+    {
+        height: 300px;
+        width: 300px;
+    }
 </style>
