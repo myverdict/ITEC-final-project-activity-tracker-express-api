@@ -4,7 +4,7 @@ let express = require('express');
 
 // this will look for the models/index.js file
 let db = require('../models');
-let ActivityRecord = db.Record;
+let ActivityRecord = db.ActivityRecord;
 
 let Sequelize = require('sequelize');
 

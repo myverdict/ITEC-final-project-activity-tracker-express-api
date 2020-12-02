@@ -2,7 +2,7 @@
 // the way it would be stored in the database
 
 module.exports = ( sequelize, DataTypes ) => {
-    let Record = sequelize.define('Record', {
+    let ActivityRecord = sequelize.define('ActivityRecord', {
         date: {
             type: DataTypes.DATE,
             allowNull: false
@@ -33,9 +33,9 @@ module.exports = ( sequelize, DataTypes ) => {
     // for e.g., if the structure of the database is changed, the database will be updated
     // force: true - recreate table and delete all data (initially needed)
     // force: false - don't recreate table and data is preserved
-    Record.sync( {force: false} ).then( () => {
+    ActivityRecord.sync( {force: false} ).then( () => {
         console.log('Synced activity record table')
     })
 
-    return Record;
+    return ActivityRecord;
 }                                           // END of module.exports
