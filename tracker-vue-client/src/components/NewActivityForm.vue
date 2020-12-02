@@ -132,6 +132,8 @@
 
 
 <script>
+    import { lowercase } from "@/utilities/filters.js";
+
     export default {
         name: "NewActivityForm",              // name of this component
         // do not modify a prop: props data has to be provided by its parent, App.vue
@@ -159,9 +161,7 @@
             }
         },                                     // END of data
         filters: {
-            lowercase(text) {
-                return text.toLowerCase();
-            }
+            lowercase
         },
         methods: {
             // submit method for the "Add record" button in the form section

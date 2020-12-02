@@ -58,7 +58,7 @@ router.post('/activity_records', function (req, res, next) {
             if (err instanceof Sequelize.ValidationError)
             {
                 let messages = err.errors.map( (e) => e.message );
-
+                console.log(messages);
                 return res.status(400).json(messages);              // 400 = bad request from user
             }
 

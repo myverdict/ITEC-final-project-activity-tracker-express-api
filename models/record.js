@@ -11,11 +11,11 @@ module.exports = ( sequelize, DataTypes ) => {
             type: DataTypes.NUMBER,
             allowNull: false
         },
-        activity_type: {
+        type: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        media: {
+        medium: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -24,7 +24,7 @@ module.exports = ( sequelize, DataTypes ) => {
             allowNull: false,
             defaultValue: false             // setting 'completed' default value to false
         },
-        notes: {
+        note: {
             type: DataTypes.STRING
         }
     })                                      // END of the activity record object

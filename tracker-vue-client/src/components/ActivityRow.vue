@@ -25,6 +25,8 @@
 
 
 <script>
+    import { shortDate, textareaDisplayCharacterLimit, decimalPlaces } from "@/utilities/filters.js";
+
     export default {
         name: "ActivityRow",             // name of the component
         // do not modify a prop: props data has to be provided by its parent, ActivityTable.vue
@@ -34,31 +36,17 @@
             edit: Boolean
         },
         filters: {
-            shortDate(date)
-            {
-                return new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(date);
-            },
+            shortDate,
+            decimalPlaces,
+            textareaDisplayCharacterLimit,
             checkedBox(completed)
             {
                 if(completed)
                 {
-                  return `Completed`;
+                    return `Completed`;
                 }
                 return `Not completed`;
             },
-            decimalPlaces: function(hours, numberOfDecimalPlaces)
-            {
-                let formattedHours = hours.toFixed(numberOfDecimalPlaces);
-                return formattedHours;
-            },
-            textareaDisplayCharacterLimit(text)
-            {
-                if(text.length >= 40)
-                {
-                  return text.substr(0, 40) + "...";
-                }
-                return text;
-            }
         },
         methods: {
             deleteRecord(record) {

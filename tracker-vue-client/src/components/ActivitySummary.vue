@@ -25,7 +25,7 @@
 
                 <!-- ASK PROF: Should this heading be here or in ActivityChart.vue? -->
                 <h4 class="card-subtitle text-muted">Activity Growth Charts</h4>
-
+                <activity-chart v-bind:chartData="chartData"></activity-chart>
           </div>
       </div>          <!-- END of the activity summary section -->
     </div>
@@ -34,6 +34,7 @@
 
 <script>
     import ActivityChart from "@/components/ActivityChart.vue";
+    import { decimalPlaces } from "@/utilities/filters.js";
 
     export default {
         name: "ActivitySummary",            // name of this component
@@ -53,10 +54,7 @@
             }
         },
         filters: {
-            decimalPlaces: function(hours, numberOfDecimalPlaces) {
-                let formattedHours = hours.toFixed(numberOfDecimalPlaces);
-                return formattedHours;
-            }
+            decimalPlaces
         },
         computed: {
             // calculate total hours in the summary section of the application
@@ -66,7 +64,7 @@
                     total = total + record.hours;                   // alternate: total += record.hours;
                 })
                 return total;
-            },
+            },                                                      // END of totalHours inside computed
             totalHoursForEachActivityRecord() {
                 let arrayOfObjects = [];                            // empty array for objects
                 // empty object for each type and hours for the type ("object literal" syntax)
@@ -125,7 +123,23 @@
                 })                  // END of activityRecords array forEach
 
                 return arrayOfObjects;
-            }                                       // END of the totalHoursForEachActivityRecord
+            },                                      // END of the totalHoursForEachActivityRecord inside computed
+            chartData() {
+                let activityLabels = this.activityRecords.map( rec => rec.type );       // all the types
+                let activityHours = this.activityRecords.map( rec => rec.hours );       // all the hours
+
+                // return data in format expected by chartJS
+                return {
+                    labels: activityLabels,
+                    datasets: [{
+                        label: 'Height for Activity Hours',
+                        data: activityHours,
+                        borderColor: 'red',
+                        fill: true,                 // optional
+                        lineTension: 0.1            // 0 = straight lines between points, 1 = bezier curves
+                    }]
+                }
+            }                                       // END of chartData inside computed
         }                                           // END of computed
     }
 </script>
