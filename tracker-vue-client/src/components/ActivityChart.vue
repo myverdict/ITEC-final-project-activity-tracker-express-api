@@ -30,7 +30,6 @@
         mounted() {
             this.renderChart(this.chartData, this.chartOptions);
         }
-
     }
 </script>
 

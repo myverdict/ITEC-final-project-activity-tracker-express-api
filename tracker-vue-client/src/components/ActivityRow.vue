@@ -58,7 +58,7 @@
             },
             updateRecord(record) {
                 // emits a message to the parent ActivityTable.vue
-                this.$emit("update-record-row", record)
+                this.$emit("update-record-row", record)                 // ASK PROF: does this need to me this.record like line 56
             }
         }
     }

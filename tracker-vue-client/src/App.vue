@@ -4,7 +4,7 @@
         <!-- Application header/title: activity variable is the activity data from the Vue script below -->
         <h1 class="text-center">{{ activity }} Time Tracker</h1>
 
-
+        <!-- child components used as tag elements -->
         <new-activity-form v-on:record-added="newRecordAdded"
                            v-bind:activity="activity"
                            v-bind:types="types"
@@ -39,12 +39,12 @@
         },
         data() {
             return {
-                // Array of activity records displayed in the activity table summary
-                activityRecords: [],
-
                 // Name of the activity, e.g., sport, exercise, language, etc.
                 // used in App.vue and in the NewActivityForm.vue as props
                 activity: "Practice Art",
+
+                // Array of activity records displayed in the activity table summary
+                activityRecords: [],
 
                 // used to create choices (drop-down list): the option elements for select for question 3
                 // used in the NewActivityForm.vue and in ActivitySummary.vue as props
