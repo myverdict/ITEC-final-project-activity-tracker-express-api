@@ -1,2 +1,5 @@
 node_modules
 activity_record.sqlite
+
+# Editor directories and files
+.idea
