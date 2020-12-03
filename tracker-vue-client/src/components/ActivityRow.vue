@@ -38,6 +38,7 @@
             record: Object,
             edit: Boolean
         },
+        // defined in the src/utilities/filter.js file
         filters: {
             shortDate,
             decimalPlaces,

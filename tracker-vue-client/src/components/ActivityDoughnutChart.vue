@@ -19,7 +19,7 @@
                 chartOptions: {
                     title: {
                         display:true,
-                        text: "Medium of Instruction Data"
+                        text: "Medium of Instruction"
                     }
                 }
             }

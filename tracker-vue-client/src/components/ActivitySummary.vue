@@ -144,6 +144,7 @@
 
                 return arrayOfObjects;
             },                                      // END of the totalHoursForEachActivityRecord inside computed
+            // chart data for Bar charts
             chartData() {
                 let colors = [ "orchid", "teal", "yellowgreen" ];
                 let activityArray = this.totalHoursForEachActivityRecord;
@@ -160,28 +161,29 @@
 
                 // return data in format expected by chartJS
                 return {
-                    labels: activityTypeNames,                    // this is the array value
+                    labels: activityTypeNames,          // this is an array value
                     datasets: [{
-                        label:"Hours practiced",
-                        data: activityNumHours,                   // this is an array value
-                        backgroundColor: colors                   // this is an array value
+                        label:"Hours practiced",        // this is the label that will show in tooltip on hover
+                        data: activityNumHours,         // this is an array value
+                        backgroundColor: colors         // this is an array value
                     }]
                 }
-            },                                      // END of chartData inside computed
-            // ASK PROF: what is going on here?
+            },                                      // END of chartData inside computed (Bar chart)
+            // chart data for Doughnut chart
             chartDataForMedia() {
-                let colors = [ "#DAF7A6", "#FFC300" ];
-                let activitiesArray = this.totalHoursForEachActivityRecord;
+                let colors = [ "Tomato", "Grey" ];
 
                 let activityMediaCount = [];        // [ traditionalCount, digitalCount ]
                 let traditionalCount = 0;
                 let digitalCount = 0;
 
-                // add number of times media type appears to each medium
-                activitiesArray.forEach(function (eachActivity) {
-                    console.log(eachActivity.medium);                   // debug
+                console.log(this.media.traditional);        // debug
+                console.log(this.media.digital);            // debug
 
-                    // if(eachActivity.medium == this.media.traditional)
+                // add number of times media type appears to each medium
+                this.activityRecords.forEach(function (eachActivity) {
+                    // ASK Prof: Why is this if clause not working?
+                    // if(eachActivity.medium === this.media.traditional)
                     if(eachActivity.medium == "Traditional")
                     {
                         traditionalCount += 1;
@@ -192,23 +194,23 @@
                     }
                 })
 
-                // ASK PROF: Traditional is showing 0?
+                // Push the counts onto the activityMediaCount array
                 activityMediaCount.push(traditionalCount);
                 activityMediaCount.push(digitalCount);
-                console.log(activityMediaCount);                    // debug
 
                 // return data in format expected by chartJS
                 return {
-                    // labels: [this.media.traditional, this.media.digital]
-                    labels: ["Traditional", "Digital"],   // this is the array value
+                    // alternate way of writing labels as below
+                    // labels: ["Traditional", "Digital"],      // this is an array value
+                    labels: [ this.media.traditional, this.media.digital ],   // this is an array value
                     datasets: [{
                         data: activityMediaCount,                 // this is an array value
                         backgroundColor: colors                   // this is an array value
                     }]
                 }
-            }
+            }                                       // END of chartDataForMedia in computed (Doughnut chart)
         }                                           // END of computed
-    }
+    }                                               // END of export default
 </script>
 
 
@@ -218,6 +220,6 @@
     {
         height: 300px;
         width: 300px;
-        display: inline-block;
+        display: inline-block;      /* Allow graphs to be placed side by side */
     }
 </style>

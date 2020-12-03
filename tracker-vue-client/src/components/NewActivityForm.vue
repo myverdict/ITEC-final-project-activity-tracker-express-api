@@ -160,6 +160,7 @@
                 errors: []
             }
         },                                     // END of data
+        // defined in the src/utilities/filter.js file
         filters: {
             lowercase
         },
