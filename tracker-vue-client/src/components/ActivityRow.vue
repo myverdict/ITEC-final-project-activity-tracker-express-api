@@ -1,3 +1,5 @@
+<!-- this is a child component of its parent ActivityTable.vue -->
+
 <template>
     <tbody>
         <!-- used v-for to create one table row for each activity record -->
@@ -13,14 +15,22 @@
 
             <td>{{ record.medium }}</td>
 
-            <!-- <td>{{ record.completed | checkedBox }}</td> -->
-            <td><img v-if="record.completed" src="../assets/check.png" class="center"></td>
+            <td><img v-if="record.completed" src="../assets/check.png" class="center"
+                     alt="completed" title="completed"></td>
 
             <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
 
             <td v-show="edit">
-                <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord" class="left">
-                <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord" class="right">
+                <b-button v-b-modal.update-row-modal class="btn btn-light left">
+                    <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord">
+                </b-button>
+
+                <b-button class="btn btn-light right">
+                    <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord">
+                </b-button>
+
+                <!-- <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord" class="left"> -->
+                <!-- <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord" class="right"> -->
             </td>
         </tr>
     </tbody>
@@ -31,7 +41,7 @@
     import { shortDate, textareaDisplayCharacterLimit, decimalPlaces } from "@/utilities/filters.js";
 
     export default {
-        name: "ActivityRow",             // name of the component
+        name: "ActivityRow",                  // name of this component
         // do not modify a prop: props data has to be provided by its parent, ActivityTable.vue
         // to avoid modification of props v-model in the template should not be attached to props
         props: {
@@ -69,12 +79,13 @@
     tr.paintingRow { background-color: MistyRose; }
 
     img { height: 25px; }
-    img.left { float: left; }
-    img.right { float: right; }
     img.center
     {
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
+    .left { float: left; }
+    .right { float: right; }
+    .btn:hover { background-color: black; }
 </style>

@@ -1,3 +1,4 @@
+<!-- this is a child component of the parent App.vue -->
 <template>
     <div>
         <!-- Activity Summary section -->

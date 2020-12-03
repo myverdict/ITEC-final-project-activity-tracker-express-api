@@ -1,3 +1,4 @@
+<!-- this is a child component of the parent App.vue -->
 <template>
     <div>
         <!-- List of Activity Records TABLE section -->
@@ -21,7 +22,7 @@
                 <div id="records table-responsive">
                     <table class="table table-sm table-bordered table-hover table-light">                           <!-- START of table -->
                         <thead>
-                            <tr class="bg-danger">                                        <!-- START of table row headers -->
+                            <tr class="bg-danger">                      <!-- START of table row headers -->
                                 <th>Date</th>
                                 <th>Hours</th>
                                 <th>Type</th>
@@ -70,7 +71,7 @@
         },
         data() {
             return {
-                editTable: false
+                editTable: false,
             }
         },
         computed: {

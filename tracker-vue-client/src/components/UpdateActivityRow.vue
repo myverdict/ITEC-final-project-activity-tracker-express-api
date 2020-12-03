@@ -8,9 +8,6 @@
 
 
 <script>
-    // ASK PROF: if this is right, if yes, where to place this and how to connect to ActivityRow.vue?
-    // https://coreui.io/docs/components/bootstrap/modal/#
-
     export default {
         name: "UpdateActivityRow",            // name of this component
 
