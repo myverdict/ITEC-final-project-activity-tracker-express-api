@@ -1,26 +1,29 @@
 <template>
-    <!-- TODO use v-for to create one table row for each activity record -->
-    <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
-    <tr v-bind:class="{sketchingRow: record.type === 'Sketching',
-                       drawingRow: record.type === 'Drawing',
-                       paintingRow: record.type === 'Painting'}">
-        <td>{{ record.date | shortDate }}</td>
+    <tbody>
+        <!-- used v-for to create one table row for each activity record -->
+        <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
+        <tr v-bind:class="{sketchingRow: record.type === 'Sketching',
+                           drawingRow: record.type === 'Drawing',
+                           paintingRow: record.type === 'Painting'}">
+            <td>{{ record.date | shortDate }}</td>
 
-        <td>{{ record.hours | decimalPlaces(2) }}</td>
+            <td>{{ record.hours | decimalPlaces(2) }}</td>
 
-        <td>{{ record.type }}</td>
+            <td>{{ record.type }}</td>
 
-        <td>{{ record.medium }}</td>
+            <td>{{ record.medium }}</td>
 
-        <td>{{ record.completed | checkedBox }}</td>
+            <!-- <td>{{ record.completed | checkedBox }}</td> -->
+            <td><img v-if="record.completed" src="../assets/check.png" class="center"></td>
 
-        <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
+            <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
 
-        <td v-show="edit">
-            <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord">
-            <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord">
-        </td>
-    </tr>
+            <td v-show="edit">
+                <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord" class="left">
+                <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord" class="right">
+            </td>
+        </tr>
+    </tbody>
 </template>
 
 
@@ -38,15 +41,7 @@
         filters: {
             shortDate,
             decimalPlaces,
-            textareaDisplayCharacterLimit,
-            checkedBox(completed)
-            {
-                if(completed)
-                {
-                    return `Completed`;
-                }
-                return `Not completed`;
-            },
+            textareaDisplayCharacterLimit
         },
         methods: {
             deleteRecord(record) {
@@ -85,5 +80,22 @@
     img
     {
         height: 25px;
+    }
+
+    img.left
+    {
+        float: left;
+    }
+
+    img.right
+    {
+        float: right;
+    }
+
+    img.center
+    {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 </style>

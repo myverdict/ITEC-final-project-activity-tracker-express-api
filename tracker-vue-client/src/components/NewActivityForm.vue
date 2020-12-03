@@ -3,7 +3,7 @@
         <!-- Add records section (form) -->
         <div id="add-hours" class="card">
             <!-- 'Add records' title/heading for this section -->
-            <h2 class="card-header">Add Records</h2>
+            <h2 class="card-header text-white bg-dark">Add Records</h2>
 
             <div class="card-body">                 <!-- START of the actual form section -->
                 <!-- Display error messages section -->
@@ -122,7 +122,7 @@
 
                 <!-- Submit Button for form: Add a "Add record" button -->
                 <div>
-                    <button class="btn btn-primary mt-2" type="button" v-on:click="submit">Add record</button>
+                    <button class="btn btn-warning mt-2" type="button" v-on:click="submit">Add record</button>
                 </div>                              <!-- END of 'Add record' submit button -->
             </div>                                  <!-- END of the actual form section -->
         </div>                                      <!-- END of the add records section -->
@@ -228,5 +228,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    input:hover, select:hover, textarea:hover
+    {
+        background-color: aliceblue;
+    }
 </style>

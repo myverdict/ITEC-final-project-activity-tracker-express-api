@@ -2,7 +2,7 @@
     <div>
         <!-- List of Activity Records TABLE section -->
         <div class="card">
-            <h2 class="card-header">Activity Records</h2>
+            <h2 class="card-header text-white bg-dark">Activity Records</h2>
 
 
             <div class="edit-table-toggle form-check editing-checkbox">
@@ -18,18 +18,19 @@
                     <!-- {{ activityRecords.length }} records       without computed property -->
                 </h3>
 
-                <div id="records">
-                    <table class="table table-hover">               <!-- START of table -->
-
-                        <tr>                                        <!-- START of table row headers -->
-                            <th>Date</th>
-                            <th>Hours</th>
-                            <th>Type</th>
-                            <th>Media</th>
-                            <th>Status</th>
-                            <th>Notes</th>
-                            <th v-show="editTable">Actions</th>
-                        </tr>                                       <!-- END of table row headers -->
+                <div id="records table-responsive">
+                    <table class="table table-sm table-bordered table-hover table-light">                           <!-- START of table -->
+                        <thead>
+                            <tr class="bg-danger">                                        <!-- START of table row headers -->
+                                <th>Date</th>
+                                <th>Hours</th>
+                                <th>Type</th>
+                                <th>Media</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                                <th v-show="editTable">Actions</th>
+                            </tr>                                       <!-- END of table row headers -->
+                        </thead>
 
                         <!--
                             * v-for to create one table row for each activity record
@@ -83,7 +84,7 @@
                 {
                   return this.activityRecords.length + " records";
                 }
-            },
+            }
         },
         methods: {
             deleteRecord(record) {
@@ -110,5 +111,9 @@
     .editing-checkbox
     {
         margin: 20px;
+    }
+    th
+    {
+        text-align: center;
     }
 </style>

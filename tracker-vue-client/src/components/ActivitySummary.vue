@@ -2,28 +2,32 @@
     <div>
         <!-- Activity Summary section -->
         <div class="card">
-            <h2 class="card-header">Summary</h2>
+            <h2 class="card-header text-white bg-dark">Summary</h2>
 
             <div class="card-body">
                 <p>
                     You have practiced a total of
                     <!-- a computed property 'totalHours' to calculate the total hours practiced -->
                     <!-- used with a filter to restrict to 2 decimal places -->
-                    {{ totalHours | decimalPlaces(2) }} hours.
+                    {{ totalHours | decimalPlaces(2) | hoursWordPlurality }}.
                 </p>
 
                 <!-- Challenge question! Display a list of the total hours for each type. -->
                 <p v-if="activityRecords.length != 0">
-                    Practice hours for each activity:
-                    <li v-for="eachActivityHours in totalHoursForEachActivityRecord">
-                        {{ eachActivityHours.typeOfActivity }}:
-                        {{ eachActivityHours.numOfHours | decimalPlaces(2) }}
-                    </li>
+                    <div class="card-header text-white bg-secondary">
+                          Practice hours for each activity:
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" v-for="eachActivityHours in totalHoursForEachActivityRecord">
+                            {{ eachActivityHours.typeOfActivity }} :
+                            {{ eachActivityHours.numOfHours | decimalPlaces(2) | hoursWordPlurality }}
+                        </li>
+                    </ul>
                 </p>
 
                 <br><hr>
 
-                <!-- ASK PROF: Should this heading be here or in ActivityChart.vue? -->
                 <h4 class="card-subtitle text-muted">Activity Growth Charts</h4><br>
                 <div class="chartSize">
                     <activity-chart v-bind:chartData="chartData"></activity-chart>
@@ -56,7 +60,19 @@
             }
         },
         filters: {
-            decimalPlaces
+            decimalPlaces,
+          // ASK PROF: how to use the computed property in line 12 and 24
+          // set the plurality of the word 'hour(s)' in the summary section of the application
+          hoursWordPlurality(numOfHours) {
+              if(numOfHours == 1)
+              {
+                  return `1.00 hour`;
+              }
+              else
+              {
+                  return `${numOfHours} hours`;
+              }
+          },
         },
         computed: {
             // calculate total hours in the summary section of the application
