@@ -2,9 +2,9 @@
     <tbody>
         <!-- used v-for to create one table row for each activity record -->
         <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
-        <tr v-bind:class="{sketchingRow: record.type === 'Sketching',
-                           drawingRow: record.type === 'Drawing',
-                           paintingRow: record.type === 'Painting'}">
+        <tr v-bind:class="{ sketchingRow: record.type === 'Sketching',
+                            drawingRow: record.type === 'Drawing',
+                            paintingRow: record.type === 'Painting' }">
             <td>{{ record.date | shortDate }}</td>
 
             <td>{{ record.hours | decimalPlaces(2) }}</td>
@@ -53,7 +53,8 @@
             },
             updateRecord(record) {
                 // emits a message to the parent ActivityTable.vue
-                this.$emit("update-record-row", record)                 // ASK PROF: does this need to me this.record like line 56
+                // ASK PROF: does this need to me this.record like line 56
+                this.$emit("update-record-row", record)
             }
         }
     }
@@ -62,36 +63,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .sketchingRow
-    {
-        background-color: AliceBlue;
-    }
+    tr.sketchingRow { background-color: AliceBlue; }
+    tr.drawingRow { background-color: LemonChiffon; }
+    tr.paintingRow { background-color: MistyRose; }
 
-    .drawingRow
-    {
-        background-color: LemonChiffon;
-    }
-
-    .paintingRow
-    {
-        background-color: MistyRose;
-    }
-
-    img
-    {
-        height: 25px;
-    }
-
-    img.left
-    {
-        float: left;
-    }
-
-    img.right
-    {
-        float: right;
-    }
-
+    img { height: 25px; }
+    img.left { float: left; }
+    img.right { float: right; }
     img.center
     {
         display: block;

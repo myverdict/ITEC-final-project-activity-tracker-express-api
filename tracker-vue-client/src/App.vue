@@ -19,7 +19,8 @@
 
 
         <activity-summary v-bind:activityRecords="activityRecords"
-                          v-bind:types="types">
+                          v-bind:types="types"
+                          v-bind:media="media">
         </activity-summary>
     </div>
 </template>

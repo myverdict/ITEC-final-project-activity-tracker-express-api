@@ -7,9 +7,9 @@
     let { reactiveProp } = mixins;
 
     export default {
-        extends: Bar,                   // type of chart
+        extends: Bar,                       // type of chart
 
-        name: "ActivityChart",          // name of this component
+        name: "ActivityBarChart",           // name of this component
 
         mixins: [ reactiveProp ],
 
@@ -22,6 +22,13 @@
                                 beginAtZero: true           // this is for the scale to begin at 0
                             }
                         }]
+                    },
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: "Practice Hours for each Activity"
                     }
                 }
             }

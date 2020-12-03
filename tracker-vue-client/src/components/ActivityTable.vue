@@ -25,9 +25,9 @@
                                 <th>Date</th>
                                 <th>Hours</th>
                                 <th>Type</th>
-                                <th>Media</th>
+                                <th>Medium</th>
                                 <th>Status</th>
-                                <th>Notes</th>
+                                <th>Note</th>
                                 <th v-show="editTable">Actions</th>
                             </tr>                                       <!-- END of table row headers -->
                         </thead>
@@ -93,6 +93,8 @@
             },
             // ASK PROF: should take more arguments for updated data
             updateRecord(record) {
+
+
                 // emits a message to the parent App.vue
                 this.$emit("update-record-table", record)
             }

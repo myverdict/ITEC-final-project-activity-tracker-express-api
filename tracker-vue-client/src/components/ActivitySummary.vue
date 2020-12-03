@@ -30,8 +30,14 @@
 
                 <h4 class="card-subtitle text-muted">Activity Growth Charts</h4><br>
                 <div class="chartSize">
-                    <activity-chart v-bind:chartData="chartData"></activity-chart>
+                    <activity-bar-chart v-bind:chartData="chartData"></activity-bar-chart>
                 </div>
+
+
+                <div class="chartSize">
+                    <activity-doughnut-chart v-bind:chartData="chartDataForMedia"></activity-doughnut-chart>
+                </div>
+
           </div>
       </div>          <!-- END of the activity summary section -->
     </div>
@@ -39,19 +45,23 @@
 
 
 <script>
-    import ActivityChart from "@/components/ActivityChart.vue";
-    import { decimalPlaces } from "@/utilities/filters.js";
+    import ActivityDoughnutChart from "@/components/ActivityDoughnutChart";
+    import ActivityBarChart from "@/components/ActivityBarChart.vue";
+    import { decimalPlaces, hoursWordPlurality } from "@/utilities/filters.js";
 
     export default {
         name: "ActivitySummary",            // name of this component
+        // name of child components
         components: {
-            ActivityChart                   // name of child component
+            ActivityDoughnutChart,
+            ActivityBarChart
         },
         // do not modify a prop: props data has to be provided by its parent, App.vue
         // to avoid modification of props v-model in the template should not be attached to props
         props: {
             activityRecords: Array,
-            types: Array
+            types: Array,
+            media: Object
         },
         data() {
             return {
@@ -59,23 +69,13 @@
 
             }
         },
+        // defined in the src/utilities/filter.js file
         filters: {
             decimalPlaces,
-          // ASK PROF: how to use the computed property in line 12 and 24
-          // set the plurality of the word 'hour(s)' in the summary section of the application
-          hoursWordPlurality(numOfHours) {
-              if(numOfHours == 1)
-              {
-                  return `1.00 hour`;
-              }
-              else
-              {
-                  return `${numOfHours} hours`;
-              }
-          },
+            hoursWordPlurality
         },
         computed: {
-            // calculate total hours in the summary section of the application
+            // calculate total hours to be used in the summary section of the application
             totalHours() {
                 let total = 0;
                 this.activityRecords.forEach( record => {
@@ -83,8 +83,10 @@
                 })
                 return total;
             },                                                      // END of totalHours inside computed
+            // calculate the total hours for each activity
             totalHoursForEachActivityRecord() {
                 let arrayOfObjects = [];                            // empty array for objects
+
                 // empty object for each type and hours for the type ("object literal" syntax)
                 let objectInArray = {};
 
@@ -143,7 +145,7 @@
                 return arrayOfObjects;
             },                                      // END of the totalHoursForEachActivityRecord inside computed
             chartData() {
-                let colors = ["orchid", "teal", "yellowgreen", ];
+                let colors = [ "orchid", "teal", "yellowgreen" ];
                 let activityArray = this.totalHoursForEachActivityRecord;
 
                 // create 2 empty arrays for the activity type and activity hours
@@ -160,12 +162,51 @@
                 return {
                     labels: activityTypeNames,                    // this is the array value
                     datasets: [{
-                        label:"Practice hours for Activities",
+                        label:"Hours practiced",
                         data: activityNumHours,                   // this is an array value
                         backgroundColor: colors                   // this is an array value
                     }]
                 }
-            }                                       // END of chartData inside computed
+            },                                      // END of chartData inside computed
+            // ASK PROF: what is going on here?
+            chartDataForMedia() {
+                let colors = [ "#DAF7A6", "#FFC300" ];
+                let activitiesArray = this.totalHoursForEachActivityRecord;
+
+                let activityMediaCount = [];        // [ traditionalCount, digitalCount ]
+                let traditionalCount = 0;
+                let digitalCount = 0;
+
+                // add number of times media type appears to each medium
+                activitiesArray.forEach(function (eachActivity) {
+                    console.log(eachActivity.medium);                   // debug
+
+                    // if(eachActivity.medium == this.media.traditional)
+                    if(eachActivity.medium == "Traditional")
+                    {
+                        traditionalCount += 1;
+                    }
+                    else
+                    {
+                        digitalCount += 1;
+                    }
+                })
+
+                // ASK PROF: Traditional is showing 0?
+                activityMediaCount.push(traditionalCount);
+                activityMediaCount.push(digitalCount);
+                console.log(activityMediaCount);                    // debug
+
+                // return data in format expected by chartJS
+                return {
+                    // labels: [this.media.traditional, this.media.digital]
+                    labels: ["Traditional", "Digital"],   // this is the array value
+                    datasets: [{
+                        data: activityMediaCount,                 // this is an array value
+                        backgroundColor: colors                   // this is an array value
+                    }]
+                }
+            }
         }                                           // END of computed
     }
 </script>
@@ -177,5 +218,6 @@
     {
         height: 300px;
         width: 300px;
+        display: inline-block;
     }
 </style>

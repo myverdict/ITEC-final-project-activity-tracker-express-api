@@ -33,3 +33,17 @@ export function decimalPlaces(hours, numberOfDecimalPlaces) {
     let formattedHours = hours.toFixed(numberOfDecimalPlaces);
     return formattedHours;
 }
+
+// set the plurality of the word 'hour(s)' in the summary section of the application
+export function hoursWordPlurality(numOfHours) {
+    if(numOfHours == 1)
+    {
+        return `1.00 hour`;
+    }
+    else
+    {
+        return `${numOfHours} hours`;
+    }
+}
+
+
