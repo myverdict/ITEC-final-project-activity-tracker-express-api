@@ -106,17 +106,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    #records
-    {
-        max-height: 250px;
-        overflow: scroll;
-    }
-    .editing-checkbox
-    {
-        margin: 20px;
-    }
-    th
-    {
-        text-align: center;
-    }
+    #records { max-height: 250px; overflow: scroll; }
+    .editing-checkbox { margin: 20px; }
+    th { text-align: center; }
 </style>

@@ -77,7 +77,6 @@
     tr.sketchingRow { background-color: AliceBlue; }
     tr.drawingRow { background-color: LemonChiffon; }
     tr.paintingRow { background-color: MistyRose; }
-
     img { height: 25px; }
     img.center
     {
