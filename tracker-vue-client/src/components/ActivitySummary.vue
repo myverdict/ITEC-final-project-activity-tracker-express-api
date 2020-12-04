@@ -39,6 +39,9 @@
                     <activity-doughnut-chart v-bind:chartData="chartDataForMedia"></activity-doughnut-chart>
                 </div>
 
+                <div class="chartSize">
+                    <activity-pie-chart v-bind:chartData="charDataForStatus"></activity-pie-chart>
+                </div>
           </div>
       </div>          <!-- END of the activity summary section -->
     </div>
@@ -46,6 +49,7 @@
 
 
 <script>
+    import ActivityPieChart from "@/components/ActivityPieChart";
     import ActivityDoughnutChart from "@/components/ActivityDoughnutChart";
     import ActivityBarChart from "@/components/ActivityBarChart.vue";
     import { decimalPlaces, hoursWordPlurality } from "@/utilities/filters.js";
@@ -54,6 +58,7 @@
         name: "ActivitySummary",            // name of this component
         // name of child components
         components: {
+            ActivityPieChart,
             ActivityDoughnutChart,
             ActivityBarChart
         },
@@ -172,7 +177,7 @@
             },                                      // END of chartData inside computed (Bar chart)
             // chart data for Doughnut chart
             chartDataForMedia() {
-                let colors = [ "Tomato", "Grey" ];
+                let colors = [ "#DAF7A6", "#FFC300" ];
 
                 let activityMediaCount = [];        // [ traditionalCount, digitalCount ]
                 let traditionalCount = 0;
@@ -209,7 +214,40 @@
                         backgroundColor: colors                   // this is an array value
                     }]
                 }
-            }                                       // END of chartDataForMedia in computed (Doughnut chart)
+            },                                      // END of chartDataForMedia in computed (Doughnut chart)
+            // chart data for Pie chart
+            charDataForStatus() {
+                let colors = [ "#DAF7A6", "#FFC300" ];
+
+                let statusCount = [];               // [ completedCount, pendingCount ]
+                let completedCount = 0;
+                let pendingCount = 0;
+
+                // add the number of activities completed/pending
+                this.activityRecords.forEach( function (eachActivity) {
+                    if(eachActivity.completed)
+                    {
+                        completedCount += 1;
+                    }
+                    else
+                    {
+                        pendingCount += 1;
+                    }
+                })
+
+                // push the completed and pending count on to the status array
+                statusCount.push(completedCount);
+                statusCount.push(pendingCount);
+
+                // return data in format expected by chartJS
+                return {
+                    labels: [ "Completed", "Pending" ],     // this is an array value
+                    datasets: [{
+                        data: statusCount,                  // this is an array value
+                        backgroundColor: colors             // this is an array value
+                    }]
+                }
+            }                                       // END of chartDataForStatus in computed (Pie chart)
         }                                           // END of computed
     }                                               // END of export default
 </script>
