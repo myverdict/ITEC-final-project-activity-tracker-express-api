@@ -8,7 +8,7 @@ export function uppercase(text) {
     return text.toUpperCase();
 }
 
-// representing date in short format as
+// representing date in short format as passing a
 export function shortDate(date) {
     let dateJS = new Date(date);
     return new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(dateJS);

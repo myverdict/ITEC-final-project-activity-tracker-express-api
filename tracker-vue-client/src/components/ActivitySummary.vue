@@ -183,9 +183,6 @@
                 let traditionalCount = 0;
                 let digitalCount = 0;
 
-                console.log(this.media.traditional);        // debug
-                console.log(this.media.digital);            // debug
-
                 // add number of times media type appears to each medium
                 this.activityRecords.forEach(function (eachActivity) {
                     // ASK Prof: Why is this if clause not working?

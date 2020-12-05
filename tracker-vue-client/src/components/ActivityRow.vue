@@ -21,12 +21,12 @@
             <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
 
             <td v-show="edit">
-                <b-button v-b-modal.update-row-modal class="btn btn-light left">
-                    <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord">
+                <b-button v-b-modal.update-row-modal class="btn btn-light left" v-on:click="updateRecord">
+                    <img src="@/assets/pencil.png" title="Update/Edit">
                 </b-button>
 
-                <b-button class="btn btn-light right">
-                    <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord">
+                <b-button class="btn btn-light right" v-on:click="deleteRecord">
+                    <img src="@/assets/delete.png" title="Delete">
                 </b-button>
 
                 <!-- <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord" class="left"> -->
@@ -65,7 +65,7 @@
             updateRecord(record) {
                 // emits a message to the parent ActivityTable.vue
                 // ASK PROF: does this need to me this.record like line 56
-                this.$emit("update-record-row", record)
+                this.$emit("update-record-row", record.id)
             }
         }
     }

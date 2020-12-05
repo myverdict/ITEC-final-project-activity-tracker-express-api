@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: "UpdateActivityRow",            // name of this component
+        name: "UpdateActivityRowForm",            // name of this component
 
     }
 </script>

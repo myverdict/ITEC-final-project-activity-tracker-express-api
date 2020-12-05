@@ -5,6 +5,9 @@
         <h1 class="text-center">{{ activity }} Time Tracker</h1>
 
         <!-- child components used as tag elements -->
+
+        <!-- use v-bind with child props as attributes to send data from App.vue to child -->
+        <!-- use v-on to listen to events from child components -->
         <new-activity-form v-on:record-added="newRecordAdded"
                            v-bind:activity="activity"
                            v-bind:types="types"
@@ -12,12 +15,18 @@
         </new-activity-form>
 
 
+        <!-- use v-bind with child props as attributes to send data from App.vue to child -->
+        <!-- use v-on to listen to events from child components -->
         <activity-table v-bind:activityRecords="activityRecords"
+                        v-bind:types="types"
+                        v-bind:media="media"
                         v-on:delete-record-table="deleteRecord"
-                        v-on:update-record-table="updateRecords">
+                        v-on:save="updateOneItem"
+                        v-on:update-record-table="updateAllRecords">
         </activity-table>
+        <!-- ASK PROF: v-on:save="updateOneItem" coming from ActivityTable.vue (this does not work) -->
 
-
+        <!-- use v-bind with child props as attributes to send data from App.vue to child -->
         <activity-summary v-bind:activityRecords="activityRecords"
                           v-bind:types="types"
                           v-bind:media="media">
@@ -60,41 +69,46 @@
             }
         },
         mounted() {
-            this.updateRecords();
+            this.updateAllRecords();
         },
         methods: {
             // this method adds an activity record to the database and updates the api
             newRecordAdded(record) {
                 console.log(record);
                 // the $ variable is taken from main.js & the add method is taken from the ActivityService.vue
-                this.$activity_record_api.addActivityRecord(record)
-                    .then( record => {
-                        this.updateRecords();
-                    })
-                    .catch( err => {
-                        let msg = err.response.data.join(', ');
-
-                        alert('Error adding activity record.\n' + msg);
-                    })
+                this.$activity_record_api.addActivityRecord(record).then( record => {
+                    this.updateAllRecords();
+                })
+                .catch( err => {
+                    let msg = err.response.data.join(', ');
+                    alert('Error adding activity record.\n' + msg);
+                })
             },                        // END of newRecordAdded method
 
             // this method deletes one record from the database & updates the api
             deleteRecord(record) {
                 // the $ variable is taken from main.js & the delete method is taken from the ActivityService.vue
-                this.$activity_record_api.deleteActivityRecord(record.id)
-                    .then( () => {
-                        this.updateRecords();
-                    })
+                this.$activity_record_api.deleteActivityRecord(record.id).then( () => {
+                    this.updateAllRecords();
+                })
             },                        // END of deleteRecord method
 
+            // item coming from b-modal to replace array with 1 updated table record row
+            // ASK PROF: something is wrong here, I am not doing it properly
+            updateOneItem(record) {
+                this.$activity_record_api.updateActivityRecord(record).then( () => {
+                    this.updateAllRecords();
+                })
+                // this.activityRecords.$set(index, record)
+            },
+
             // this method updates all activity records
-            updateRecords() {
+            updateAllRecords() {
                 // the $ variable is taken from main.js & the get method is taken from the ActivityService.vue
-                this.$activity_record_api.getAllActivityRecords()
-                    .then( (records) => {
-                        this.activityRecords = records;
-                    })
-            },                          // END of updateRecords method
+                this.$activity_record_api.getAllActivityRecords().then( (records) => {
+                    this.activityRecords = records;
+                })
+            },                          // END of updateAllRecords method
         }                               // END of methods
     }                                   // END of export default
 </script>

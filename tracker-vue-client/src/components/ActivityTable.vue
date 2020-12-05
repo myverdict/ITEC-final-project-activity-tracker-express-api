@@ -33,23 +33,121 @@
                             </tr>                                       <!-- END of table row headers -->
                         </thead>
 
-                        <!--
-                            * v-for to create one table row for each activity record
-                            * v-bind props (from ActivityRow.vue, the child component) &
-                              pass data from parent (ActivityTable.vue) to child component
-                            * v-on to listen to events from the child component, ActivityRow.vue
-                            * alternate way of writing the tag element: <ActivityRow></ActivityRow>
-                        -->
-                        <activity-row v-for="record in activityRecords"
-                                      v-bind:key="record.id"
-                                      v-bind:record="record"
-                                      v-bind:edit="editTable"
-                                      v-on:delete-record-row="deleteRecord"
-                                      v-on:update-record-row="updateRecord">
-                        </activity-row>                         <!-- END of ActivityRow.vue component -->
+                        <tbody>
+                            <!-- used v-for to create one table row for each activity record -->
+                            <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
+                            <tr v-for="record in activityRecords"
+                                v-bind:key="record.id"
+                                v-bind:class="{ sketchingRow: record.type === 'Sketching',
+                                                drawingRow: record.type === 'Drawing',
+                                                paintingRow: record.type === 'Painting' }">
+                                <td>{{ record.date | shortDate }}</td>
 
+                                <td>{{ record.hours | decimalPlaces(2) }}</td>
+
+                                <td>{{ record.type }}</td>
+
+                                <td>{{ record.medium }}</td>
+
+                                <td><img v-if="record.completed" src="../assets/check.png" class="center"
+                                         alt="completed" title="completed"></td>
+
+                                <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
+
+                                <td v-show="editTable">
+                                    <b-button v-b-modal.update-row-modal
+                                              rec="'record'" v-on:click="showData(record)"
+                                              class="btn btn-light left">
+                                        <img src="@/assets/pencil.png" title="Update/Edit">
+                                    </b-button>
+
+                                    <b-button class="btn btn-light right" v-on:click="deleteRecord(record)">
+                                        <img src="@/assets/delete.png" title="Delete">
+                                    </b-button>
+
+                                    <!-- <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord" class="left"> -->
+                                    <!-- <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord" class="right"> -->
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>            <!-- END of table -->
                 </div>                  <!-- END of #records div -->
+
+
+                <!-- this is the pop-up form for updating table row -->
+                <!-- ASK PROF: How to receive id of one record in this ActivityTable.vue component -->
+                <b-modal id="update-row-modal" title="Edit Activity Data" v-on:show="populate" v-on:ok="save">
+                    <!-- Q1. input date for Date -->
+                    <div class="form-group">
+                        <label class="form-label" for="edit-date-input">What date did you practice art?</label>
+                        <input type="date" class="form-control" id="edit-date-input" v-model="updateDate">
+
+                        <small id="date-help" class="form-text text-muted">
+                            Date must be today or in the past.
+                        </small>
+                    </div>
+
+
+                    <!-- Q2. input hours -->
+                    <div class="form-group">
+                        <label class="form-label" for="edit-hours-input">How many hours did you practice for?</label>
+                        <input class="form-control" id="edit-hours-input" v-model="updateHours">
+
+                        <small id="hours-help" class="form-text text-muted">
+                            Enter a number of hours, more than 0, up to a maximum of 24
+                        </small>
+                    </div>
+
+
+                    <!-- Q3. input drop-down for type of activity -->
+                    <div class="form-group">
+                        <label class="form-label" for="edit-type-input">What type?</label>
+
+                        <select class="form-control" id="edit-type-input" v-model="updateType">
+                            <option v-for="type in types">{{ type }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Q4. input radio options for medium of instruction -->
+                    <div class="form-label pb-2">What media?</div>
+
+                    <!-- radio option 1 for traditional medium -->
+                    <div class="form-check-inline">
+                        <input id="edit-media1-input" class="form-check-input" type="radio"
+                               v-bind:value="media.traditional" v-model="updateMedium">
+
+                        <label class="form-check-label" for="edit-media1-input">
+                            {{ media.traditional }}
+                        </label>
+                    </div>
+
+                    <!-- radio option 2 for digital medium -->
+                    <div class="form-check-inline">
+                        <input id="edit-media2-input" class="form-check-input" type="radio"
+                               v-bind:value="media.digital" v-model="updateMedium">
+
+                        <label class="form-check-label" for="edit-media2-input">
+                            {{ media.digital }}
+                        </label>
+                    </div>
+
+
+                    <!-- Q5. input checkbox for completed status -->
+                    <div class="form-check pb-3 pt-3">
+                        <input class="form-check-input" type="checkbox" id="edit-status-input"
+                               v-model="updateCompleted">
+                        <label class="form-check-label" for="edit-status-input">Completed?</label>
+                    </div>
+
+
+                    <!-- Q6. textarea for notes -->
+                    <div class="form-group">
+                        <label for="edit-textarea-input">Notes:</label>
+                        <textarea id="edit-textarea-input" class="form-control" rows="3"
+                                  v-model="updateNote"></textarea>
+                    </div>
+                </b-modal>
+
             </div>                      <!-- END of .card-body div -->
         </div>                          <!-- END of List of Activity Records TABLE section -->
     </div>
@@ -58,6 +156,7 @@
 
 <script>
     import ActivityRow from "@/components/ActivityRow.vue";
+    import { shortDate, textareaDisplayCharacterLimit, decimalPlaces } from "@/utilities/filters.js";
 
     export default {
         name: "ActivityTable",            // name of this component
@@ -67,12 +166,30 @@
         // do not modify a prop: props data has to be provided by its parent, App.vue
         // to avoid modification of props v-model in the template should not be attached to props
         props: {
-            activityRecords: Array
+            activityRecords: Array,       // array of record objects received from App.vue
+            types: Array,                 // array of activity types received from App.vue
+            media: Object                 // object of medium of instruction received form App.vue
         },
         data() {
             return {
-                editTable: false,
+                editTable: false,         // initial setting of the 'Edit table?' checkbox
+                recordsToUpdate: this.activityRecords,      // make a copy to avoid modifying props
+
+                record: {},
+
+                updateDate: new Date(),
+                updateHours: "",
+                updateType: "",
+                updateMedium: "",
+                updateCompleted: false,
+                updateNote: ""
             }
+        },
+        // defined in the src/utilities/filter.js file
+        filters: {
+            shortDate,
+            decimalPlaces,
+            textareaDisplayCharacterLimit
         },
         computed: {
             // set the plurality of the word 'record(s)' in the table title section of the application
@@ -88,6 +205,22 @@
             }
         },
         methods: {
+            // when the edit button is clicked in a table row, the form will reflect/populate
+            // the fields with the specific table row data
+            showData(record) {
+                // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
+                let isoDate = new Date(record.date).toISOString();
+
+                // take only the date part that will be represented in MM/DD/YYYY format in the input date field
+                this.updateDate = isoDate.substring(0, 10);
+
+                this.updateHours = record.hours;
+                this.updateType = record.type;
+                this.updateMedium = record.medium;
+                this.updateCompleted = record.completed;
+                this.updateNote = record.note;
+            },
+            // when the delete button is clicked in a table row
             deleteRecord(record) {
                 // emits a message to the parent App.vue
                 this.$emit("delete-record-table", record);
@@ -97,7 +230,26 @@
 
 
                 // emits a message to the parent App.vue
-                this.$emit("update-record-table", record)
+                this.$emit("update-record-table", record.id)
+            },
+            populate() {
+                // set data that the modal will display
+                // avoid v-model directly to the data that is being changed, or you'll have to think how
+                // to get the original data back if the user changes the data but then changes their mind
+                // and wants to cancel the edit.
+            },
+            save(record) {
+                // save the data that the modal is showing
+                this.record.id = record.id;
+                this.record.date = this.updateDate;
+                this.record.hours = this.updateHours;
+                this.record.type = this.updateType;
+                this.record.medium = this.updateMedium;
+                this.record.completed = this.updateCompleted;
+                this.record.note = this.updateNote;
+
+                // emits a message to the parent App.vue
+                this.$emit("update-record-table", this.record);
             }
         }
     }
@@ -109,4 +261,19 @@
     #records { max-height: 250px; overflow: scroll; }
     .editing-checkbox { margin: 20px; }
     th { text-align: center; }
+
+    /* the below styling is copied from ActivityRow.vue */
+    tr.sketchingRow { background-color: AliceBlue; }
+    tr.drawingRow { background-color: LemonChiffon; }
+    tr.paintingRow { background-color: MistyRose; }
+    img { height: 25px; }
+    img.center
+    {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .left { float: left; }
+    .right { float: right; }
+    .btn:hover { background-color: black; }
 </style>
