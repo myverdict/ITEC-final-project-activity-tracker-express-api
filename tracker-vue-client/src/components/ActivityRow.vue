@@ -21,8 +21,8 @@
         <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
 
         <td v-show="edit">
-            <b-button v-b-modal.update-row-modal size="sm" rec="'record'"
-                      v-on:click="populateFormData"
+            <b-button 
+                      v-on:click="requestEdit"
                       class="btn btn-light left">
                 <img src="@/assets/pencil.png" title="Update/Edit" class="actions">
             </b-button>
@@ -49,7 +49,7 @@
         },
         data() {
             return {
-                populatedData: this.record      // make a copy of the record prop to avoid modifying props
+              //  populatedData: this.record      // make a copy of the record prop to avoid modifying props
             }
         },
         // defined in the src/utilities/filter.js file
@@ -60,7 +60,7 @@
         },
         methods: {
             // ASK PROF: why do i need a record argument, when I am not using the argument anywhere?
-            deleteRecord(record) {
+            deleteRecord() {
                 if (confirm(`Delete ${this.record.type} activity, with ${this.record.hours} hours, dated ${this.$options.filters.shortDate(this.record.date)}?`))
                 {
                     // emits a message to the parent ActivityTable.vue
@@ -72,10 +72,10 @@
 
             // ASK PROF: should the method take a record argument, because the row is already related to one record
             // then why do we need a record argument?
-            populateFormData(record) {
+            requestEdit() {
                 // emit a message to the parent, ActivityTable.vue with the prop data
                 // ASK PROF: this.populatedData (data) or this.record (prop) or record (argument)
-                this.$emit("populate-row-data", this.populatedData);
+                this.$emit("request-edit-record", this.record);
             },
         }
     }
