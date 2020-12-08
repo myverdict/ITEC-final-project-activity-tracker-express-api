@@ -4,7 +4,7 @@
     <div>
 
     <!-- POP UP FORM: for updating table row data -->
-    <b-modal id="update-row-modal" title="Edit Activity Data" v-on:ok="save">
+    <b-modal v-model="modalShow" id="update-row-modal" title="Edit Activity Data" v-on:show="populate" v-on:ok="save">
         <!-- Q1. input date for Date -->
         <div class="form-group">
             <label class="form-label" for="edit-date-input">What date did you practice art?</label>
@@ -98,13 +98,14 @@
         // do not modify a prop: props data has to be provided by its parent, App.vue
         // to avoid modification of props v-model in the template should not be attached to props
         props: {
+            modalShow: Boolean,
             initialRecordInfo: Object,
             types: Array,                 // array of activity types received from App.vue
             media: Object  
         },
         data() {
             return {
-                editedRecord: this.initialRecordInfo,
+                editedRecord: {},
                 recordID: -1,
                 updateDate: new Date(),
                 updateHours: "",
@@ -134,23 +135,23 @@
                 this.recordID = record.id;
 
                 // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
-                let isoDate = new Date(record.date).toISOString();
+                let isoDate = new Date(this.initialRecordInfo.date).toISOString();
 
                 // take only the date part that will be represented in MM/DD/YYYY format in the input date field
                 this.updateDate = isoDate.substring(0, 10);
 
-                this.updateHours = record.hours;
-                this.updateType = record.type;
-                this.updateMedium = record.medium;
-                this.updateCompleted = record.completed;
-                this.updateNote = record.note;
+                this.updateHours = this.initialRecordInfo.hours;
+                this.updateType = this.initialRecordInfo.type;
+                this.updateMedium = this.initialRecordInfo.medium;
+                this.updateCompleted = this.initialRecordInfo.completed;
+                this.updateNote = this.initialRecordInfo.note;
             },
             // save the updated record to the table to the same record id
             save() {
 
                 // todo validate 
                 // save the data that the modal is showing
-                this.editedRecord.id = this.recordID;
+                this.editedRecord.id = this.initialRecordInfo.id;
                 this.editedRecord.date = this.updateDate;
                 this.editedRecord.hours = this.updateHours;
                 this.editedRecord.type = this.updateType;
@@ -159,7 +160,7 @@
                 this.editedRecord.note = this.updateNote;
 
                 // emits a message to the parent App.vue
-                this.$emit("save-edited-one-record-from-table", this.record);
+                this.$emit("save-edited-one-record-from-table", this.editedRecord);
             }
         }
     }

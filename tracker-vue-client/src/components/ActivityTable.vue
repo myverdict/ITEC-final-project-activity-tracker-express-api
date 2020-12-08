@@ -8,6 +8,7 @@
         <edit-modal
         
          v-bind:initialRecordInfo="recordToEdit" :types="types" :media="media"
+         v-bind:modalShow="showEditModal"
          v-on:save-edited-one-record-from-table="recordEditSaved" />
 
         <!-- List of Activity Records TABLE section -->
@@ -49,7 +50,7 @@
                                           v-bind:key="record.id"
                                           v-bind:record="record"
                                           v-bind:edit="editTable"
-                                          v-bind:request-edit-table="requestEditRecord">
+                                          v-on:request-edit-record="requestEditRecord">
                             </activity-row>
                         </tbody>
                     </table>            <!-- END of table -->
@@ -89,15 +90,8 @@
                 // recordsToUpdate: this.activityRecords,      // make a copy to avoid modifying props
 
                 recordToEdit: {},
+                showEditModal: false
 
-                // ASK PROF: should these data items be in ActivityRow.vue as data?
-                recordID: -1,
-                updateDate: new Date(),
-                updateHours: "",
-                updateType: "",
-                updateMedium: "",
-                updateCompleted: false,
-                updateNote: ""
             }
         },
         // defined in the src/utilities/filter.js file
@@ -136,9 +130,9 @@
 
 
                 // show the modal 
-
                 // setting  data for modal
                 this.recordToEdit = record 
+                this.showEditModal = true
                 // todo show modal (need to read the documentation)
 
                 //this.recordID = record.id;
@@ -158,18 +152,18 @@
                 // this.updateNote = record.note;
             },
             // save the updated record to the table to the same record id
-            recordEditSaved() {
+            recordEditSaved(record) {
                 // save the data that the modal is showing
-                this.record.id = this.recordID;
-                this.record.date = this.updateDate;
-                this.record.hours = this.updateHours;
-                this.record.type = this.updateType;
-                this.record.medium = this.updateMedium;
-                this.record.completed = this.updateCompleted;
-                this.record.note = this.updateNote;
+                // this.record.id = this.recordID;
+                // this.record.date = this.updateDate;
+                // this.record.hours = this.updateHours;
+                // this.record.type = this.updateType;
+                // this.record.medium = this.updateMedium;
+                // this.record.completed = this.updateCompleted;
+                // this.record.note = this.updateNote;
 
                 // emits a message to the parent App.vue
-                this.$emit("save-edited-one-record-from-table", this.record);
+                this.$emit("save-edited-one-record-from-table", record);
             }
         }
     }
