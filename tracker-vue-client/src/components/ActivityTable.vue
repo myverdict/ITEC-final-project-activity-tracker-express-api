@@ -113,6 +113,7 @@
                 // emits a message to the parent App.vue
                 this.$emit("delete-record-table", record);
             },
+
             // when the edit button is clicked in a table row, the form will reflect/populate
             // the fields with the specific table row data
             requestEditRecord(record) {
@@ -123,6 +124,7 @@
                 this.recordToEdit = record;
                 this.showEditModal = true;
             },
+
             // save the updated record to the table to the same record id
             recordEditSaved(record) {
                 // emits a message to the parent App.vue
@@ -138,19 +140,4 @@
     #records { max-height: 250px; overflow: scroll; }
     .editing-checkbox { margin: 20px; }
     th { text-align: center; color: white; }
-
-    /* the below styling is copied from ActivityRow.vue */
-    tr.sketchingRow { background-color: AliceBlue; }
-    tr.drawingRow { background-color: LemonChiffon; }
-    tr.paintingRow { background-color: MistyRose; }
-    img { height: 25px; }
-    img.center
-    {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .left { float: left; }
-    .right { float: right; }
-    .btn:hover { background-color: black; }
 </style>

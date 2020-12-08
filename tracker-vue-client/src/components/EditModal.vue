@@ -106,11 +106,9 @@
         },
         data() {
             return {
-                // make a copy of the record prop to avoid modifying props
-                // editedRecord: this.initialRecordInfo,
-                editedRecord: {},
+                editedRecord: {},         // for new updated/edited record object
 
-                // for new updated/edited information
+                // for new updated/edited information for record fields
                 recordID: -1,
                 updateDate: new Date(),
                 updateHours: "",
@@ -121,8 +119,6 @@
 
                 // store errors in an array discovered during validation
                 errors: [],
-
-                showEditModal: this.modalShow,
             }
         },
         methods: {
@@ -150,53 +146,20 @@
             },
             // save the updated record to the table to the same record id
             save() {
-                // Validate pop-up form fields
-                // Assumption: at the beginning of the validation, there are no errors
-                this.errors = [];
+                // TODO validate data
 
-                // convert the dateString to a Date object
-                let date = new Date(this.dateString);
+                // save the new updated/edited data that the modal is showing
+                this.editedRecord.id = this.initialRecordInfo.id;
+                this.editedRecord.date = this.updateDate;
+                this.editedRecord.hours = this.updateHours;
+                this.editedRecord.type = this.updateType;
+                this.editedRecord.medium = this.updateMedium;
+                this.editedRecord.completed = this.updateCompleted;
+                this.editedRecord.note = this.updateNote;
 
-                // Validation 1: dates need to be valid, and in the past or today
-                if(!this.dateString || this.dateString == "Invalid Date" || date > new Date())
-                {
-                    this.errors.push("Select a valid date, today or in the past.");
-                }
-
-                // Validation 2: Hours should be between 0 and 24
-                if(this.hours <= 0 || this.hours > 24)
-                {
-                    this.errors.push("Number of hours must be greater than 0 and less than 24.");
-                }
-
-                // Validation 3: Activity type has to be selected from drop down list
-                if(!this.type)
-                {
-                    this.errors.push("Select an activity type.");
-                }
-
-                // Validation 4: Activity medium of instruction must be selected (for radio buttons)
-                if(!this.medium)
-                {
-                    this.errors.push("Select a media.");
-                }
-
-                // if there are no errors, add a record to the activityRecords in the parent App.vue
-                if(this.errors.length == 0)
-                {
-                    // save the new updated/edited data that the modal is showing
-                    this.editedRecord.id = this.initialRecordInfo.id;
-                    this.editedRecord.date = this.updateDate;
-                    this.editedRecord.hours = this.updateHours;
-                    this.editedRecord.type = this.updateType;
-                    this.editedRecord.medium = this.updateMedium;
-                    this.editedRecord.completed = this.updateCompleted;
-                    this.editedRecord.note = this.updateNote;
-
-                    // emits a message to the parent App.vue
-                    this.$emit("save-edited-one-record-from-modal", this.editedRecord);
-                }
-            }
+                // emits a message to the parent ActivityTable.vue
+                this.$emit("save-edited-one-record-from-modal", this.editedRecord);
+            },
         }
     }
 </script>
