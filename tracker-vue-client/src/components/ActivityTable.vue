@@ -2,6 +2,14 @@
 
 <template>
     <div>
+
+        <!-- todo show modal when needed -->
+
+        <edit-modal
+        
+         v-bind:initialRecordInfo="recordToEdit" :types="types" :media="media"
+         v-on:save-edited-one-record-from-table="recordEditSaved" />
+
         <!-- List of Activity Records TABLE section -->
         <div class="card">
             <h2 class="card-header text-white bg-dark">Activity Records</h2>
@@ -41,91 +49,14 @@
                                           v-bind:key="record.id"
                                           v-bind:record="record"
                                           v-bind:edit="editTable"
-                                          v-bind:populate-row-data="populate">
+                                          v-bind:request-edit-table="requestEditRecord">
                             </activity-row>
                         </tbody>
                     </table>            <!-- END of table -->
                 </div>                  <!-- END of #records div -->
 
 
-                <!-- POP UP FORM: for updating table row data -->
-                <b-modal id="update-row-modal" title="Edit Activity Data" v-on:ok="save">
-                    <!-- Q1. input date for Date -->
-                    <div class="form-group">
-                        <label class="form-label" for="edit-date-input">What date did you practice art?</label>
-
-                        <input type="date" class="form-control" id="edit-date-input" v-model="updateDate">
-
-                        <small id="date-help" class="form-text text-muted">
-                            Date must be today or in the past.
-                        </small>
-                    </div>
-
-
-                    <!-- Q2. input hours -->
-                    <div class="form-group">
-                        <label class="form-label" for="edit-hours-input">
-                            How many hours did you practice for?
-                        </label>
-
-                        <input class="form-control" id="edit-hours-input" v-model="updateHours">
-
-                        <small id="hours-help" class="form-text text-muted">
-                            Enter a number of hours, more than 0, up to a maximum of 24
-                        </small>
-                    </div>
-
-
-                    <!-- Q3. input drop-down for type of activity -->
-                    <div class="form-group">
-                        <label class="form-label" for="edit-type-input">What type?</label>
-
-                        <select class="form-control" id="edit-type-input" v-model="updateType">
-                            <option v-for="type in types">{{ type }}</option>
-                        </select>
-                    </div>
-
-                    <!-- Q4. input radio options for medium of instruction -->
-                    <div class="form-label pb-2">What media?</div>
-
-                    <!-- radio option 1 for traditional medium -->
-                    <div class="form-check-inline">
-                        <input id="edit-media1-input" class="form-check-input" type="radio"
-                               v-bind:value="media.traditional" v-model="updateMedium">
-
-                        <label class="form-check-label" for="edit-media1-input">
-                            {{ media.traditional }}
-                        </label>
-                    </div>
-
-                    <!-- radio option 2 for digital medium -->
-                    <div class="form-check-inline">
-                        <input id="edit-media2-input" class="form-check-input" type="radio"
-                               v-bind:value="media.digital" v-model="updateMedium">
-
-                        <label class="form-check-label" for="edit-media2-input">
-                            {{ media.digital }}
-                        </label>
-                    </div>
-
-
-                    <!-- Q5. input checkbox for completed status -->
-                    <div class="form-check pb-3 pt-3">
-                        <input class="form-check-input" type="checkbox" id="edit-status-input"
-                               v-model="updateCompleted">
-
-                        <label class="form-check-label" for="edit-status-input">Completed?</label>
-                    </div>
-
-
-                    <!-- Q6. textarea for notes -->
-                    <div class="form-group">
-                        <label for="edit-textarea-input">Notes:</label>
-
-                        <textarea id="edit-textarea-input" class="form-control" rows="3"
-                                  v-model="updateNote"></textarea>
-                    </div>
-                </b-modal>
+            
 
             </div>                      <!-- END of .card-body div -->
         </div>                          <!-- END of List of Activity Records TABLE section -->
@@ -135,12 +66,14 @@
 
 <script>
     import ActivityRow from "@/components/ActivityRow.vue";
+    import EditModal from '@/components/EditModal.vue'
     import { shortDate, textareaDisplayCharacterLimit, decimalPlaces } from "@/utilities/filters.js";
 
     export default {
         name: "ActivityTable",            // name of this component
         components: {
-            ActivityRow
+            ActivityRow,
+            EditModal
         },
         // do not modify a prop: props data has to be provided by its parent, App.vue
         // to avoid modification of props v-model in the template should not be attached to props
@@ -155,7 +88,7 @@
                 // not used variable
                 // recordsToUpdate: this.activityRecords,      // make a copy to avoid modifying props
 
-                record: {},
+                recordToEdit: {},
 
                 // ASK PROF: should these data items be in ActivityRow.vue as data?
                 recordID: -1,
@@ -195,28 +128,37 @@
             // ASK PROF: should this populate steps be in ActivityRow.vue or here?
             // when the edit button is clicked in a table row, the form will reflect/populate
             // the fields with the specific table row data
-            populate(record) {
+            requestEditRecord(record) {
                 // set data that the modal will display
                 // avoid v-model directly to the data that is being changed, or you'll have to think how
                 // to get the original data back if the user changes the data but then changes their mind
                 // and wants to cancel the edit.
 
-                this.recordID = record.id;
 
-                // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
-                let isoDate = new Date(record.date).toISOString();
+                // show the modal 
 
-                // take only the date part that will be represented in MM/DD/YYYY format in the input date field
-                this.updateDate = isoDate.substring(0, 10);
+                // setting  data for modal
+                this.recordToEdit = record 
+                // todo show modal (need to read the documentation)
 
-                this.updateHours = record.hours;
-                this.updateType = record.type;
-                this.updateMedium = record.medium;
-                this.updateCompleted = record.completed;
-                this.updateNote = record.note;
+                //this.recordID = record.id;
+
+
+
+                // // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
+                // let isoDate = new Date(record.date).toISOString();
+
+                // // take only the date part that will be represented in MM/DD/YYYY format in the input date field
+                // this.updateDate = isoDate.substring(0, 10);
+
+                // this.updateHours = record.hours;
+                // this.updateType = record.type;
+                // this.updateMedium = record.medium;
+                // this.updateCompleted = record.completed;
+                // this.updateNote = record.note;
             },
             // save the updated record to the table to the same record id
-            save() {
+            recordEditSaved() {
                 // save the data that the modal is showing
                 this.record.id = this.recordID;
                 this.record.date = this.updateDate;
