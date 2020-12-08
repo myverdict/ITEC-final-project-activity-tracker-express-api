@@ -1,7 +1,8 @@
 <template>
     <div>
         <!-- POP UP FORM: for updating/editing table row data -->
-        <b-modal id="update-row-modal" title="Edit Activity Data"
+        <b-modal id="update-row-modal"
+                 title="Edit Activity Data"
                  v-model="modalShow"
                  v-on:show="populate"
                  v-on:ok="save">
@@ -184,7 +185,7 @@
                 if(this.errors.length == 0)
                 {
                     // save the new updated/edited data that the modal is showing
-                    this.editedRecord.id = this.this.initialRecordInfo.id;
+                    this.editedRecord.id = this.initialRecordInfo.id;
                     this.editedRecord.date = this.updateDate;
                     this.editedRecord.hours = this.updateHours;
                     this.editedRecord.type = this.updateType;

@@ -126,7 +126,7 @@
             // save the updated record to the table to the same record id
             recordEditSaved(record) {
                 // emits a message to the parent App.vue
-                this.$emit("save-edited-one-record-from-modal", record);
+                this.$emit("save-edited-one-record-from-table", record);
             }
         }
     }
