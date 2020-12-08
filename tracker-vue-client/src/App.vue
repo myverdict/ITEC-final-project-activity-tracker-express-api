@@ -21,7 +21,7 @@
                         v-bind:types="types"
                         v-bind:media="media"
                         v-on:delete-record-table="deleteRecord"
-                        v-on:save-edited-one-record-from-table="updateOneItem">
+                        v-on:save-edited-one-record-from-modal="updateOneItem">
         </activity-table>
 
 
