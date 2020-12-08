@@ -1,39 +1,38 @@
 <!-- this is a child component of its parent ActivityTable.vue -->
 
 <template>
-    <tbody>
-        <!-- used v-for to create one table row for each activity record -->
-        <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
-        <tr v-bind:class="{ sketchingRow: record.type === 'Sketching',
-                            drawingRow: record.type === 'Drawing',
-                            paintingRow: record.type === 'Painting' }">
-            <td>{{ record.date | shortDate }}</td>
+    <!-- used v-for to create one table row for each activity record -->
+    <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
+    <tr v-bind:key="record.id"
+        v-bind:class="{ sketchingRow: record.type === 'Sketching',
+                        drawingRow: record.type === 'Drawing',
+                        paintingRow: record.type === 'Painting' }">
+        <td>{{ record.date | shortDate }}</td>
 
-            <td>{{ record.hours | decimalPlaces(2) }}</td>
+        <td>{{ record.hours | decimalPlaces(2) }}</td>
 
-            <td>{{ record.type }}</td>
+        <td>{{ record.type }}</td>
 
-            <td>{{ record.medium }}</td>
+        <td>{{ record.medium }}</td>
 
-            <td><img v-if="record.completed" src="../assets/check.png" class="center"
-                     alt="completed" title="completed"></td>
+        <td><img v-if="record.completed" src="../assets/check.png" class="center"
+                 alt="completed" title="completed"></td>
 
-            <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
+        <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
 
-            <td v-show="edit">
-                <b-button v-b-modal.update-row-modal class="btn btn-light left" v-on:click="updateRecord">
-                    <img src="@/assets/pencil.png" title="Update/Edit">
-                </b-button>
+        <td v-show="edit">
+            <b-button v-b-modal.update-row-modal size="sm" rec="'record'"
+                      v-on:click="populateFormData"
+                      class="btn btn-light left">
+                <img src="@/assets/pencil.png" title="Update/Edit" class="actions">
+            </b-button>
 
-                <b-button class="btn btn-light right" v-on:click="deleteRecord">
-                    <img src="@/assets/delete.png" title="Delete">
-                </b-button>
-
-                <!-- <img src="@/assets/pencil.png" title="Update/Edit" v-on:click="updateRecord" class="left"> -->
-                <!-- <img src="@/assets/delete.png" title="Delete" v-on:click="deleteRecord" class="right"> -->
-            </td>
-        </tr>
-    </tbody>
+            <b-button class="btn btn-light right" size="sm"
+                      v-on:click="deleteRecord">
+                <img src="@/assets/delete.png" title="Delete" class="actions">
+            </b-button>
+        </td>
+    </tr>
 </template>
 
 
@@ -48,6 +47,11 @@
             record: Object,
             edit: Boolean
         },
+        data() {
+            return {
+                populatedData: this.record      // make a copy of the record prop to avoid modifying props
+            }
+        },
         // defined in the src/utilities/filter.js file
         filters: {
             shortDate,
@@ -55,6 +59,7 @@
             textareaDisplayCharacterLimit
         },
         methods: {
+            // ASK PROF: why do i need a record argument, when I am not using the argument anywhere?
             deleteRecord(record) {
                 if (confirm(`Delete ${this.record.type} activity, with ${this.record.hours} hours, dated ${this.$options.filters.shortDate(this.record.date)}?`))
                 {
@@ -62,11 +67,16 @@
                     this.$emit("delete-record-row", this.record);
                 }
             },
-            updateRecord(record) {
-                // emits a message to the parent ActivityTable.vue
-                // ASK PROF: does this need to me this.record like line 56
-                this.$emit("update-record-row", record.id)
-            }
+            // when the edit button is clicked in a table row, the form will reflect/populate
+            // the fields with the specific table row data
+
+            // ASK PROF: should the method take a record argument, because the row is already related to one record
+            // then why do we need a record argument?
+            populateFormData(record) {
+                // emit a message to the parent, ActivityTable.vue with the prop data
+                // ASK PROF: this.populatedData (data) or this.record (prop) or record (argument)
+                this.$emit("populate-row-data", this.populatedData);
+            },
         }
     }
 </script>

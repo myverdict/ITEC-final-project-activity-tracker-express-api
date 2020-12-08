@@ -21,10 +21,9 @@
                         v-bind:types="types"
                         v-bind:media="media"
                         v-on:delete-record-table="deleteRecord"
-                        v-on:save="updateOneItem"
-                        v-on:update-record-table="updateAllRecords">
+                        v-on:save-edited-one-record-from-table="updateOneItem">
         </activity-table>
-        <!-- ASK PROF: v-on:save="updateOneItem" coming from ActivityTable.vue (this does not work) -->
+
 
         <!-- use v-bind with child props as attributes to send data from App.vue to child -->
         <activity-summary v-bind:activityRecords="activityRecords"
@@ -87,19 +86,18 @@
 
             // this method deletes one record from the database & updates the api
             deleteRecord(record) {
-                // the $ variable is taken from main.js & the delete method is taken from the ActivityService.vue
+                // the $activity_record_api variable is taken from main.js, and
+                // the deleteActivityRecord method is taken from the ActivityService.vue
                 this.$activity_record_api.deleteActivityRecord(record.id).then( () => {
                     this.updateAllRecords();
                 })
             },                        // END of deleteRecord method
 
             // item coming from b-modal to replace array with 1 updated table record row
-            // ASK PROF: something is wrong here, I am not doing it properly
             updateOneItem(record) {
                 this.$activity_record_api.updateActivityRecord(record).then( () => {
                     this.updateAllRecords();
                 })
-                // this.activityRecords.$set(index, record)
             },
 
             // this method updates all activity records
