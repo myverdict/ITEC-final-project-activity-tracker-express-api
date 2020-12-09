@@ -1,8 +1,7 @@
 <template>
     <div>
         <!-- POP UP FORM: for updating/editing table row data -->
-        <b-modal id="update-row-modal"
-                 title="Edit Activity Data"
+        <b-modal id="update-row-modal" title="Edit Activity Data"
                  v-model="modalShow"
                  v-on:show="populate"
                  v-on:ok="save">
@@ -13,6 +12,7 @@
                 <!-- show a list of validation errors from form -->
                 <li v-for="error in errors">{{ error }}</li>
             </div>
+
 
             <!-- Q1. input date for Date -->
             <div class="form-group">
@@ -119,6 +119,10 @@
 
                 // store errors in an array discovered during validation
                 errors: [],
+
+                // TODO ASK PROF: I added this but it does not work
+                //  make a copy of the record prop to avoid modifying props
+                modalShowFromDataProperty: this.modalShow,
             }
         },
         methods: {
@@ -146,7 +150,7 @@
             },
             // save the updated record to the table to the same record id
             save() {
-                // TODO validate data
+                // TODO ASK PROF: validate data not working properly
                 // Validate pop-up form fields
                 // Assumption: at the beginning of the validation, there are no errors
                 this.errors = [];

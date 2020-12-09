@@ -68,8 +68,7 @@
                     this.$emit("delete-record-row", this.record);
                 }
             },
-            // when the edit button is clicked in a table row, the form will reflect/populate
-            // the fields with the specific table row data
+            // when the edit button is clicked in a table row
             requestEdit() {
                 // emit a message to the parent, ActivityTable.vue with the prop data
                 this.$emit("request-edit-record", this.record);

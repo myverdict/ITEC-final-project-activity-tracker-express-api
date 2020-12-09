@@ -50,8 +50,8 @@
                             <activity-row v-for="record in activityRecords"
                                           v-bind:key="record.id"
                                           v-bind:record="record"
-                                          v-on:delete-record-row="deleteRecord"
                                           v-bind:edit="editTable"
+                                          v-on:delete-record-row="deleteRecord"
                                           v-on:request-edit-record="requestEditRecord">
                             </activity-row>
                         </tbody>
@@ -85,7 +85,7 @@
         data() {
             return {
                 editTable: false,         // initial setting of the 'Edit table?' checkbox
-                recordToEdit: {},         // variable for updated/edited record
+                recordToEdit: {},         // initial empty variable for record to be edited
                 showEditModal: false
             }
         },
@@ -124,6 +124,7 @@
                 // and wants to cancel the edit.
                 this.recordToEdit = record;
                 this.showEditModal = true;
+                // this.showEditModal = !this.showEditModal;
             },
 
             // save the updated record to the table to the same record id
