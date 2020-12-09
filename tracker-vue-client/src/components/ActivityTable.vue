@@ -3,10 +3,12 @@
 <template>
     <div>
         <!-- v-bind types & media is binding a prop from EditModal.vue to a prop in ActivityTable.vue -->
-        <edit-modal v-bind:initialRecordInfo="recordToEdit"
+        <edit-modal 
+                    ref="editRecordModal"
+                    v-bind:initialRecordInfo="recordToEdit"
                     v-bind:types="types"
                     v-bind:media="media"
-                    v-bind:modalShow="showEditModal"
+                  
                     v-on:save-edited-one-record-from-modal="recordEditSaved">
         </edit-modal>
 
@@ -123,7 +125,8 @@
                 // to get the original data back if the user changes the data but then changes their mind
                 // and wants to cancel the edit.
                 this.recordToEdit = record;
-                this.showEditModal = true;
+                // this.showEditModal = true;
+                this.$refs.editRecordModal.show();
                 // this.showEditModal = !this.showEditModal;
             },
 

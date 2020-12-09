@@ -1,10 +1,9 @@
 <template>
     <div>
         <!-- POP UP FORM: for updating/editing table row data -->
-        <b-modal id="update-row-modal" title="Edit Activity Data"
-                 v-model="modalShow"
-                 v-on:show="populate"
-                 v-on:ok="save">
+        <b-modal id="update-row-modal" ref="updateRowModal" title="Edit Activity Data"
+                v-on:show="populate"
+                v-on:ok="save">
 
             <!-- Display error messages section -->
             <!-- using v-show to show this section if there are validation errors -->
@@ -99,7 +98,7 @@
     export default {
         name: "EditModal",
         props: {
-            modalShow: Boolean,
+            // modalShow: Boolean,
             initialRecordInfo: Object,    // initial record info to be displayed when pop up box opens
             types: Array,                 // array of activity types received from App.vue
             media: Object                 // object of medium of instruction received form App.vue
@@ -122,10 +121,15 @@
 
                 // TODO ASK PROF: I added this but it does not work
                 //  make a copy of the record prop to avoid modifying props
-                modalShowFromDataProperty: this.modalShow,
+                // modalShowFromDataProperty: this.modalShow,
             }
         },
         methods: {
+
+            show() {
+                this.$refs.updateRowModal.show();
+            },
+
             // when the edit button is clicked in a table row, the form will reflect/populate
             // the fields with the specific table row data
             populate() {
@@ -136,11 +140,13 @@
 
                 this.recordID = this.initialRecordInfo.id;
 
+                console.log(this.initialRecordInfo)
+
                 // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
-                let isoDate = new Date(this.initialRecordInfo.date).toISOString();
+               let isoDate = new Date(this.initialRecordInfo.date).toISOString();
 
                 // take only the date part that will be represented in MM/DD/YYYY format in the input date field
-                this.updateDate = isoDate.substring(0, 10);
+               this.updateDate = isoDate.substring(0, 10);
 
                 this.updateHours = this.initialRecordInfo.hours;
                 this.updateType = this.initialRecordInfo.type;
@@ -153,50 +159,50 @@
                 // TODO ASK PROF: validate data not working properly
                 // Validate pop-up form fields
                 // Assumption: at the beginning of the validation, there are no errors
-                this.errors = [];
+                // this.errors = [];
 
-                // convert the dateString to a Date object
-                let date = new Date(this.dateString);
+                // // convert the dateString to a Date object
+                // let date = new Date(this.dateString);
 
-                // Validation 1: dates need to be valid, and in the past or today
-                if(!this.dateString || this.dateString == "Invalid Date" || date > new Date())
-                {
-                  this.errors.push("Select a valid date, today or in the past.");
-                }
+                // // Validation 1: dates need to be valid, and in the past or today
+                // if(!this.dateString || this.dateString == "Invalid Date" || date > new Date())
+                // {
+                //   this.errors.push("Select a valid date, today or in the past.");
+                // }
 
-                // Validation 2: Hours should be between 0 and 24
-                if(this.hours <= 0 || this.hours > 24)
-                {
-                  this.errors.push("Number of hours must be greater than 0 and less than 24.");
-                }
+                // // Validation 2: Hours should be between 0 and 24
+                // if(this.hours <= 0 || this.hours > 24)
+                // {
+                //   this.errors.push("Number of hours must be greater than 0 and less than 24.");
+                // }
 
-                // Validation 3: Activity type has to be selected from drop down list
-                if(!this.type)
-                {
-                  this.errors.push("Select an activity type.");
-                }
+                // // Validation 3: Activity type has to be selected from drop down list
+                // if(!this.type)
+                // {
+                //   this.errors.push("Select an activity type.");
+                // }
 
-                // Validation 4: Activity medium of instruction must be selected (for radio buttons)
-                if(!this.medium)
-                {
-                  this.errors.push("Select a media.");
-                }
+                // // Validation 4: Activity medium of instruction must be selected (for radio buttons)
+                // if(!this.medium)
+                // {
+                //   this.errors.push("Select a media.");
+                // }
 
-                // if there are no errors, add a record to the activityRecords in the parent App.vue
-                if(this.errors.length == 0)
-                {
-                    // save the new updated/edited data that the modal is showing
-                    this.editedRecord.id = this.initialRecordInfo.id;
-                    this.editedRecord.date = this.updateDate;
-                    this.editedRecord.hours = this.updateHours;
-                    this.editedRecord.type = this.updateType;
-                    this.editedRecord.medium = this.updateMedium;
-                    this.editedRecord.completed = this.updateCompleted;
-                    this.editedRecord.note = this.updateNote;
+                // // if there are no errors, add a record to the activityRecords in the parent App.vue
+                // if(this.errors.length == 0)
+                // {
+                //     // save the new updated/edited data that the modal is showing
+                //     this.editedRecord.id = this.initialRecordInfo.id;
+                //     this.editedRecord.date = this.updateDate;
+                //     this.editedRecord.hours = this.updateHours;
+                //     this.editedRecord.type = this.updateType;
+                //     this.editedRecord.medium = this.updateMedium;
+                //     this.editedRecord.completed = this.updateCompleted;
+                //     this.editedRecord.note = this.updateNote;
 
                     // emits a message to the parent ActivityTable.vue
                     this.$emit("save-edited-one-record-from-modal", this.editedRecord);
-                }
+                // }
             },
         }
     }
