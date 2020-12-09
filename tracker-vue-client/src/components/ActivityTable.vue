@@ -16,6 +16,7 @@
             <h2 class="card-header text-white bg-dark">Activity Records</h2>
 
 
+            <!-- checkbox for 'Edit table' option -->
             <div class="edit-table-toggle form-check editing-checkbox">
                 <input id="edit-table" type="checkbox" class="form-check-input" v-model="editTable">
                 <label for="edit-table" class="form-check-label">Edit table?</label>
@@ -84,7 +85,7 @@
         data() {
             return {
                 editTable: false,         // initial setting of the 'Edit table?' checkbox
-                recordToEdit: {},
+                recordToEdit: {},         // variable for updated/edited record
                 showEditModal: false
             }
         },

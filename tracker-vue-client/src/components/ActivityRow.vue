@@ -21,11 +21,13 @@
         <td>{{ record.note | textareaDisplayCharacterLimit }}</td>
 
         <td v-show="edit">
-            <b-button v-on:click="requestEdit"
-                      class="btn btn-light left">
+            <!-- edit button for record row -->
+            <b-button class="btn btn-light left" size="sm"
+                      v-on:click="requestEdit">
                 <img src="@/assets/pencil.png" title="Update/Edit" class="actions">
             </b-button>
 
+            <!-- delete button for record row -->
             <b-button class="btn btn-light right" size="sm"
                       v-on:click="deleteRecord">
                 <img src="@/assets/delete.png" title="Delete" class="actions">
