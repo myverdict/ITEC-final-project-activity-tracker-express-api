@@ -124,8 +124,14 @@
                 // modalShowFromDataProperty: this.modalShow,
             }
         },
-        methods: {
+        watch: {
+            // watch the initialRecordInfo prop. if it changes, call this.populate()
 
+            initialRecordInfo() {
+                this.populate()
+            }
+        },
+        methods: {
             show() {
                 this.$refs.updateRowModal.show();
             },
@@ -138,21 +144,22 @@
                 // to get the original data back if the user changes the data but then changes their mind
                 // and wants to cancel the edit.
 
-                this.recordID = this.initialRecordInfo.id;
+                // if there's data in initialRecordInfo...
+                if (Object.keys(this.initialRecordInfo).length !== 0) {  // why JS makes it so hard to check for an empty object, I don't know. 
+                    this.recordID = this.initialRecordInfo.id;
 
-                console.log(this.initialRecordInfo)
+                    // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
+                    let isoDate = new Date(this.initialRecordInfo.date).toISOString();
 
-                // convert the Date object to an ISO date, e.g., 2020-01-21T00:00:00.000Z
-               let isoDate = new Date(this.initialRecordInfo.date).toISOString();
+                    // take only the date part that will be represented in MM/DD/YYYY format in the input date field
+                    this.updateDate = isoDate.substring(0, 10);
 
-                // take only the date part that will be represented in MM/DD/YYYY format in the input date field
-               this.updateDate = isoDate.substring(0, 10);
-
-                this.updateHours = this.initialRecordInfo.hours;
-                this.updateType = this.initialRecordInfo.type;
-                this.updateMedium = this.initialRecordInfo.medium;
-                this.updateCompleted = this.initialRecordInfo.completed;
-                this.updateNote = this.initialRecordInfo.note;
+                    this.updateHours = this.initialRecordInfo.hours;
+                    this.updateType = this.initialRecordInfo.type;
+                    this.updateMedium = this.initialRecordInfo.medium;
+                    this.updateCompleted = this.initialRecordInfo.completed;
+                    this.updateNote = this.initialRecordInfo.note;
+                }
             },
             // save the updated record to the table to the same record id
             save() {
@@ -191,14 +198,14 @@
                 // // if there are no errors, add a record to the activityRecords in the parent App.vue
                 // if(this.errors.length == 0)
                 // {
-                //     // save the new updated/edited data that the modal is showing
-                //     this.editedRecord.id = this.initialRecordInfo.id;
-                //     this.editedRecord.date = this.updateDate;
-                //     this.editedRecord.hours = this.updateHours;
-                //     this.editedRecord.type = this.updateType;
-                //     this.editedRecord.medium = this.updateMedium;
-                //     this.editedRecord.completed = this.updateCompleted;
-                //     this.editedRecord.note = this.updateNote;
+                    // save the new updated/edited data that the modal is showing
+                    this.editedRecord.id = this.initialRecordInfo.id;
+                    this.editedRecord.date = this.updateDate;
+                    this.editedRecord.hours = this.updateHours;
+                    this.editedRecord.type = this.updateType;
+                    this.editedRecord.medium = this.updateMedium;
+                    this.editedRecord.completed = this.updateCompleted;
+                    this.editedRecord.note = this.updateNote;
 
                     // emits a message to the parent ActivityTable.vue
                     this.$emit("save-edited-one-record-from-modal", this.editedRecord);

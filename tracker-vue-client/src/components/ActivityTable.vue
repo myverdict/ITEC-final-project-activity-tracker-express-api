@@ -53,8 +53,8 @@
                                           v-bind:key="record.id"
                                           v-bind:record="record"
                                           v-bind:edit="editTable"
-                                          v-on:delete-record-row="deleteRecord"
-                                          v-on:request-edit-record="requestEditRecord">
+                                          v-on:delete-record-row="deleteRecord(record)"
+                                          v-on:request-edit-record="requestEditRecord(record)">
                             </activity-row>
                         </tbody>
                     </table>            <!-- END of table -->
