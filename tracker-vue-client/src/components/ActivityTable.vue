@@ -9,7 +9,7 @@
                     v-bind:modalShow="showEditModal"
                     v-on:save-edited-one-record-from-modal="recordEditSaved">
         </edit-modal>
-
+        <!-- @changeModalShowFromDataProperty="changeModal" -->
 
         <!-- List of Activity Records TABLE section -->
         <div class="card">
@@ -131,7 +131,11 @@
             recordEditSaved(record) {
                 // emits a message to the parent App.vue
                 this.$emit("save-edited-one-record-from-table", record);
-            }
+            },
+
+            // changeModal(value) {
+            //     this.showEditModal = value;
+            // }
         }
     }
 </script>

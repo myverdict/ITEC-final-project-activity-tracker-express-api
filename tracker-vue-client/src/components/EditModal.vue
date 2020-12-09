@@ -125,6 +125,16 @@
                 modalShowFromDataProperty: this.modalShow,
             }
         },
+        // watch: {
+        //     modalShow(value) {
+        //         // Listen to external worth changing, synchronized to the local variables
+        //         this.modalShowFromDataProperty=value;
+        //     },
+        //     modalShowFromDataProperty(value) {
+        //         // Listen for changes in local variables, external variables change notification
+        //         this.$emit("changeModalShowFromDataProperty", value);
+        //     }
+        // },
         methods: {
             // when the edit button is clicked in a table row, the form will reflect/populate
             // the fields with the specific table row data
@@ -147,7 +157,7 @@
                 this.updateMedium = this.initialRecordInfo.medium;
                 this.updateCompleted = this.initialRecordInfo.completed;
                 this.updateNote = this.initialRecordInfo.note;
-            },
+            },                        // END of the populate method
             // save the updated record to the table to the same record id
             save() {
                 // TODO ASK PROF: validate data not working properly
@@ -197,9 +207,9 @@
                     // emits a message to the parent ActivityTable.vue
                     this.$emit("save-edited-one-record-from-modal", this.editedRecord);
                 }
-            },
-        }
-    }
+            },              // END of save method
+        }                   // END of methods
+    }                       // END of export default
 </script>
 
 

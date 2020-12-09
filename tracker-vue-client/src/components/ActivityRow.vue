@@ -48,11 +48,11 @@
             record: Object,
             edit: Boolean
         },
-        data() {
-            return {
-                // populatedData: this.record      // make a copy of the record prop to avoid modifying props
-            }
-        },
+        // data() {
+        //     return {
+        //         // populatedData: this.record      // make a copy of the record prop to avoid modifying props
+        //     }
+        // },
         // defined in the src/utilities/filter.js file
         filters: {
             shortDate,
@@ -80,11 +80,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    /* color settings for table rows */
     tr.sketchingRow { background-color: AliceBlue; }
     tr.drawingRow { background-color: LemonChiffon; }
     tr.paintingRow { background-color: MistyRose; }
+
+    /* img settings for check.png, delete.png, and pencil.png */
     img { height: 25px; }
-    img.center
+    img.center                /* img settings for check.png */
     {
         display: block;
         margin-left: auto;
@@ -92,5 +95,7 @@
     }
     .left { float: left; }
     .right { float: right; }
+
+    /* button hover settings for the delete.png & pencil.png buttons */
     .btn:hover { background-color: black; }
 </style>
