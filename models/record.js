@@ -33,7 +33,7 @@ module.exports = ( sequelize, DataTypes ) => {
     // for e.g., if the structure of the database is changed, the database will be updated
     // force: true - recreate table and delete all data (initially needed)
     // force: false - don't recreate table and data is preserved
-    ActivityRecord.sync( {force: false} ).then( () => {
+    ActivityRecord.sync( {force: true} ).then( () => {
         console.log('Synced activity record table')
     })
 
