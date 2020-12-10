@@ -126,6 +126,7 @@
             show() {
                 this.$refs.updateRowModal.show();
             },
+
             // when the edit button is clicked in a table row, the form will reflect/populate
             // the fields with the specific table row data
             populate() {
@@ -152,16 +153,15 @@
                     this.updateNote = this.initialRecordInfo.note;
                 })
             },                        // END of the populate method
+
             // save the updated record to the table to the same record id
             save() {
                 // Validate pop-up form fields
                 // Assumption: at the beginning of the validation, there are no errors
                 this.errors = [];
 
-                // TODO ASK PROF: Do I need !this.updateDate || this.updateDate === "Invalid Date"
                 // Validation 1: dates need to be valid, and in the past or today
-                // if(!this.updateDate || this.updateDate === "Invalid Date" || this.updateDate > new Date())
-                if(new Date(this.updateDate) > new Date())
+                if(!this.updateDate || this.updateDate == "Invalid Date" || new Date(this.updateDate) > new Date())
                 {
                     this.errors.push("Select a valid date, today or in the past.");
                 }
@@ -172,16 +172,12 @@
                     this.errors.push("Number of hours must be greater than 0 and less than 24.");
                 }
 
-                // TODO ASK PROF: I believe I don't need validations for type
-                // TODO, because one type is always clicked, no option for invalid data there
                 // Validation 3: Activity type has to be selected from drop down list
                 if(!this.updateType)
                 {
                     this.errors.push("Select an activity type.");
                 }
 
-                // TODO ASK PROF: I believe I don't need validations for media
-                // TODO, because one media is always clicked, no option for invalid data there
                 // Validation 4: Activity medium of instruction must be selected (for radio buttons)
                 if(!this.updateMedium)
                 {

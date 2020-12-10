@@ -191,10 +191,8 @@
                 let digitalCount = 0;
 
                 // add number of times media type appears to each medium
-                this.activityRecords.forEach(function (eachActivity) {
-                    // TODO ASK Prof: Why is this if clause not working, gives me an error
-                    // if(eachActivity.medium === this.media.traditional)
-                    if(eachActivity.medium == "Traditional")
+                this.activityRecords.forEach( (eachActivity) => {
+                    if(eachActivity.medium === this.media.traditional)
                     {
                         traditionalCount += 1;
                     }
