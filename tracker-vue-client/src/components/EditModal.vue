@@ -200,11 +200,6 @@
                     // ActivityTable.vue emits a message to its parent, App.vue
                     this.$emit("save-edited-one-record-from-modal", this.editedRecord);
                 }
-                // if there are errors, then keep showing the popup box
-                else
-                {
-                    this.show();
-                }
             },              // END of save method
         }                   // END of methods
     }                       // END of export default
