@@ -3,13 +3,13 @@
 <template>
     <div>
         <!-- v-bind types & media is binding a prop from EditModal.vue to a prop in ActivityTable.vue -->
-        <edit-modal v-bind:initialRecordInfo="recordToEdit"
+        <edit-modal ref="editRecordModal"
+                    v-bind:initialRecordInfo="recordToEdit"
                     v-bind:types="types"
                     v-bind:media="media"
-                    v-bind:modalShow="showEditModal"
                     v-on:save-edited-one-record-from-modal="recordEditSaved">
         </edit-modal>
-        <!-- @changeModalShowFromDataProperty="changeModal" -->
+
 
         <!-- List of Activity Records TABLE section -->
         <div class="card">
@@ -25,7 +25,7 @@
 
             <div class="card-body">
                 <h3>
-                    <!-- TODO Display number of records -->
+                    <!-- display total number of records -->
                     {{ totalRecords }}                              <!-- with computed property -->
                     <!-- {{ activityRecords.length }} records       without computed property -->
                 </h3>
@@ -33,7 +33,7 @@
                 <div id="records table-responsive">
                     <table class="table table-sm table-bordered table-hover table-light">                           <!-- START of table -->
                         <thead>
-                            <tr class="bg-danger">                      <!-- START of table row headers -->
+                            <tr class="bg-danger">        <!-- START of table row headers -->
                                 <th>Date</th>
                                 <th>Hours</th>
                                 <th>Type</th>
@@ -41,12 +41,11 @@
                                 <th>Status</th>
                                 <th>Note</th>
                                 <th v-show="editTable">Actions</th>
-                            </tr>                                       <!-- END of table row headers -->
+                            </tr>                         <!-- END of table row headers -->
                         </thead>
 
                         <tbody>
                             <!-- used v-for to create one table row for each activity record -->
-                            <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
                             <activity-row v-for="record in activityRecords"
                                           v-bind:key="record.id"
                                           v-bind:record="record"
@@ -59,13 +58,14 @@
                 </div>                  <!-- END of #records div -->
             </div>                      <!-- END of .card-body div -->
         </div>                          <!-- END of List of Activity Records TABLE section -->
-    </div>
+    </div>                              <!-- END of template div -->
 </template>
 
 
 <script>
     import ActivityRow from "@/components/ActivityRow.vue";
     import EditModal from "@/components/EditModal";
+
     import { shortDate, textareaDisplayCharacterLimit, decimalPlaces } from "@/utilities/filters.js";
 
     export default {
@@ -86,7 +86,6 @@
             return {
                 editTable: false,         // initial setting of the 'Edit table?' checkbox
                 recordToEdit: {},         // initial empty variable for record to be edited
-                showEditModal: false
             }
         },
         // defined in the src/utilities/filter.js file
@@ -115,7 +114,7 @@
                 this.$emit("delete-record-table", record);
             },
 
-            // when the edit button is clicked in a table row, the form will reflect/populate
+            // when the edit button is clicked in a table row, the form will show
             // the fields with the specific table row data
             requestEditRecord(record) {
                 // set data that the modal will display
@@ -123,19 +122,14 @@
                 // to get the original data back if the user changes the data but then changes their mind
                 // and wants to cancel the edit.
                 this.recordToEdit = record;
-                this.showEditModal = true;
-                // this.showEditModal = !this.showEditModal;
+                this.$refs.editRecordModal.show();
             },
 
             // save the updated record to the table to the same record id
             recordEditSaved(record) {
                 // emits a message to the parent App.vue
                 this.$emit("save-edited-one-record-from-table", record);
-            },
-
-            // changeModal(value) {
-            //     this.showEditModal = value;
-            // }
+            }
         }
     }
 </script>
@@ -144,6 +138,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     #records { max-height: 250px; overflow: scroll; }
+
     .editing-checkbox { margin: 20px; }
+
     th { text-align: center; color: white; }
 </style>

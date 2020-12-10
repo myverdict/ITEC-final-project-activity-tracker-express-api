@@ -1,7 +1,8 @@
 <!-- this is a child component of its parent ActivityTable.vue -->
 
 <template>
-    <!-- used v-for to create one table row for each activity record -->
+    <!-- no div required -->
+
     <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
     <tr v-bind:key="record.id"
         v-bind:class="{ sketchingRow: record.type === 'Sketching',
@@ -15,6 +16,7 @@
 
         <td>{{ record.medium }}</td>
 
+        <!-- check.png image used for completed, if !completed table cell will be empty -->
         <td><img v-if="record.completed" src="../assets/check.png" class="center"
                  alt="completed" title="completed"></td>
 
@@ -48,11 +50,6 @@
             record: Object,
             edit: Boolean
         },
-        // data() {
-        //     return {
-        //         // populatedData: this.record      // make a copy of the record prop to avoid modifying props
-        //     }
-        // },
         // defined in the src/utilities/filter.js file
         filters: {
             shortDate,
@@ -60,19 +57,21 @@
             textareaDisplayCharacterLimit
         },
         methods: {
+            // when the delete button is clicked in a table row, actions column
             deleteRecord() {
                 // displays an alert confirm box
                 if (confirm(`Delete ${this.record.type} activity, with ${this.record.hours} hours, dated ${this.$options.filters.shortDate(this.record.date)}?`))
                 {
-                    // emits a message to the parent ActivityTable.vue
+                    // emits a message to the parent, ActivityTable.vue, with prop data
                     this.$emit("delete-record-row", this.record);
                 }
             },
-            // when the edit button is clicked in a table row
+
+            // when the edit button is clicked in a table row, actions column
             requestEdit() {
-                // emit a message to the parent, ActivityTable.vue with the prop data
+                // emit a message to the parent, ActivityTable.vue, with prop data
                 this.$emit("request-edit-record", this.record);
-            },
+            }
         }
     }
 </script>
@@ -87,7 +86,7 @@
 
     /* img settings for check.png, delete.png, and pencil.png */
     img { height: 25px; }
-    img.center                /* img settings for check.png */
+    img.center                /* img settings for check.png used in status column */
     {
         display: block;
         margin-left: auto;
@@ -96,6 +95,6 @@
     .left { float: left; }
     .right { float: right; }
 
-    /* button hover settings for the delete.png & pencil.png buttons */
+    /* button hover settings for the delete.png & pencil.png (edit) buttons */
     .btn:hover { background-color: black; }
 </style>

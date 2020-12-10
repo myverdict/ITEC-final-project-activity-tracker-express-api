@@ -1,4 +1,5 @@
 <!-- this is a child component of the parent App.vue -->
+
 <template>
     <div>
         <!-- Activity Summary section -->
@@ -13,8 +14,11 @@
                     {{ totalHours | decimalPlaces(2) | hoursWordPlurality }}.
                 </p>
 
-                <!-- Challenge question! Display a list of the total hours for each type. -->
-                <p v-if="activityRecords.length != 0">
+                <!--
+                    if there are any records, then display list of total hours for each
+                    activity type & display the bar, doughnut, and pie charts.
+                -->
+                <div v-if="activityRecords.length != 0">
                     <div class="card-header text-white bg-secondary">
                           Practice hours for each activity:
                     </div>
@@ -25,55 +29,52 @@
                             {{ eachActivityHours.numOfHours | decimalPlaces(2) | hoursWordPlurality }}
                         </li>
                     </ul>
-                </p>
 
-                <br><hr>
+                    <br><hr>
 
-                <h4 class="card-subtitle text-muted">Activity Growth Charts</h4><br>
-                <div class="chartSize">
-                    <activity-bar-chart v-bind:chartData="chartData"></activity-bar-chart>
-                </div>
+                    <!-- Bar chart for activity type hours -->
+                    <h4 class="card-subtitle text-muted">Activity Growth Charts</h4><br>
+                    <div class="chartSize">
+                        <chart-bar v-bind:chartData="chartDataForHours"></chart-bar>
+                    </div>
 
+                    <!-- Doughnut chart for medium of instruction, traditional/digital -->
+                    <div class="chartSize">
+                        <chart-doughnut v-bind:chartData="chartDataForMedia"></chart-doughnut>
+                    </div>
 
-                <div class="chartSize">
-                    <activity-doughnut-chart v-bind:chartData="chartDataForMedia"></activity-doughnut-chart>
-                </div>
-
-                <div class="chartSize">
-                    <activity-pie-chart v-bind:chartData="charDataForStatus"></activity-pie-chart>
+                    <!-- Pie chart for activity status, completed/pending -->
+                    <div class="chartSize">
+                        <chart-pie v-bind:chartData="charDataForStatus"></chart-pie>
+                    </div>
                 </div>
           </div>
       </div>          <!-- END of the activity summary section -->
-    </div>
+    </div>            <!-- END of template div -->
 </template>
 
 
 <script>
-    import ActivityPieChart from "@/components/ActivityPieChart";
-    import ActivityDoughnutChart from "@/components/ActivityDoughnutChart";
-    import ActivityBarChart from "@/components/ActivityBarChart.vue";
+    import ChartBar from "@/components/ChartBar.vue";
+    import ChartDoughnut from "@/components/ChartDoughnut";
+    import ChartPie from "@/components/ChartPie";
+
     import { decimalPlaces, hoursWordPlurality } from "@/utilities/filters.js";
 
     export default {
         name: "ActivitySummary",            // name of this component
         // name of child components
         components: {
-            ActivityPieChart,
-            ActivityDoughnutChart,
-            ActivityBarChart
+            ChartBar,
+            ChartDoughnut,
+            ChartPie
         },
-        // do not modify a prop: props data has to be provided by its parent, App.vue
-        // to avoid modification of props v-model in the template should not be attached to props
+        // do not modify a prop: props data is provided by its parent, App.vue
+        // to avoid modification of props, v-model in template should not be attached to props
         props: {
             activityRecords: Array,
             types: Array,
             media: Object
-        },
-        data() {
-            return {
-                // ASK PROF: What to write here?
-
-            }
         },
         // defined in the src/utilities/filter.js file
         filters: {
@@ -84,14 +85,18 @@
             // calculate total hours to be used in the summary section of the application
             totalHours() {
                 let total = 0;
+
                 this.activityRecords.forEach( record => {
-                    total = total + record.hours;                   // alternate: total += record.hours;
+                    // alternate: total += record.hours;
+                    total = total + record.hours;
                 })
+
                 return total;
-            },                                                      // END of totalHours inside computed
+            },                                                  // END of totalHours inside computed
+
             // calculate the total hours for each activity
             totalHoursForEachActivityRecord() {
-                let arrayOfObjects = [];                            // empty array for objects
+                let arrayOfObjects = [];                        // empty array for objects
 
                 // empty object for each type and hours for the type ("object literal" syntax)
                 let objectInArray = {};
@@ -150,8 +155,9 @@
 
                 return arrayOfObjects;
             },                                      // END of the totalHoursForEachActivityRecord inside computed
+
             // chart data for Bar charts
-            chartData() {
+            chartDataForHours() {
                 let colors = [ "orchid", "teal", "yellowgreen" ];
                 let activityArray = this.totalHoursForEachActivityRecord;
 
@@ -175,6 +181,7 @@
                     }]
                 }
             },                                      // END of chartData inside computed (Bar chart)
+
             // chart data for Doughnut chart
             chartDataForMedia() {
                 let colors = [ "#DAF7A6", "#FFC300" ];
@@ -185,7 +192,7 @@
 
                 // add number of times media type appears to each medium
                 this.activityRecords.forEach(function (eachActivity) {
-                    // ASK Prof: Why is this if clause not working?
+                    // TODO ASK Prof: Why is this if clause not working?
                     // if(eachActivity.medium === this.media.traditional)
                     if(eachActivity.medium == "Traditional")
                     {
@@ -212,6 +219,7 @@
                     }]
                 }
             },                                      // END of chartDataForMedia in computed (Doughnut chart)
+
             // chart data for Pie chart
             charDataForStatus() {
                 let colors = [ "#DAF7A6", "#FFC300" ];

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <!-- display the name of the activity -->
+        <!-- display name of the activity -->
         <!-- Application header/title: activity variable is the activity data from the Vue script below -->
         <h1 class="text-center">{{ activity }} Time Tracker</h1>
 
@@ -30,7 +30,7 @@
                           v-bind:types="types"
                           v-bind:media="media">
         </activity-summary>
-    </div>
+    </div>                    <!-- END of template div -->
 </template>
 
 
@@ -40,7 +40,8 @@
     import ActivitySummary from "@/components/ActivitySummary.vue";
 
     export default {
-        name: 'App',
+        name: 'App',                // name of this component
+        // child components
         components: {
             NewActivityForm,
             ActivityTable,
@@ -53,14 +54,15 @@
                 activity: "Practice Art",
 
                 // Array of activity records displayed in the activity table summary
+                // used in ActivityTable.vue and ActivitySummary.vue
                 activityRecords: [],
 
                 // used to create choices (drop-down list): the option elements for select for question 3
-                // used in the NewActivityForm.vue and in ActivitySummary.vue as props
+                // used in the NewActivityForm.vue, ActivityTable.vue, ActivitySummary.vue, and EditModal.vue as props
                 types: [ "Sketching", "Drawing", "Painting" ],
 
                 // used to set the values and the labels for the radio buttons for question 4
-                // used in NewActivityForm.vue as props
+                // used in NewActivityForm.vue, ActivityTable.vue, ActivitySummary.vue, and EditModal.vue as props
                 media: {
                     traditional: "Traditional",
                     digital: "Digital"
@@ -73,8 +75,8 @@
         methods: {
             // this method adds an activity record to the database and updates the api
             newRecordAdded(record) {
-                console.log(record);
-                // the $ variable is taken from main.js & the add method is taken from the ActivityService.vue
+                // the $activity_record_api variable is taken from main.js &
+                // the addActivityRecord method is taken from the ActivityService.vue
                 this.$activity_record_api.addActivityRecord(record).then( record => {
                     this.updateAllRecords();
                 })
@@ -86,23 +88,26 @@
 
             // this method deletes one record from the database & updates the api
             deleteRecord(record) {
-                // the $activity_record_api variable is taken from main.js, and
-                // the deleteActivityRecord method is taken from the ActivityService.vue
+                // the $activity_record_api variable is from main.js, &
+                // the deleteActivityRecord method is from the ActivityService.vue
                 this.$activity_record_api.deleteActivityRecord(record.id).then( () => {
                     this.updateAllRecords();
                 })
             },                        // END of deleteRecord method
 
-            // item coming from b-modal to replace array with 1 updated table record row
+            // item coming from b-modal --> table --> App.vue to replace array with 1 updated table record row
             updateOneItem(record) {
+                // the $activity_record_api variable is from main.js &
+                // the updateActivityRecord method is from the ActivityService.vue
                 this.$activity_record_api.updateActivityRecord(record).then( () => {
                     this.updateAllRecords();
                 })
-            },
+            },                        // END of updateOneItem method
 
             // this method updates all activity records
             updateAllRecords() {
-                // the $ variable is taken from main.js & the get method is taken from the ActivityService.vue
+                // the $activity_record_api variable is from main.js &
+                // the getAllActivityRecords method is from the ActivityService.vue
                 this.$activity_record_api.getAllActivityRecords().then( (records) => {
                     this.activityRecords = records;
                 })

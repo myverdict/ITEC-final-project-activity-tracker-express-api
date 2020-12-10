@@ -3,14 +3,14 @@
 
 
 <script>
-    import { Pie, mixins } from 'vue-chartjs';
+    import { Doughnut, mixins } from 'vue-chartjs';
 
     let { reactiveProp } = mixins;
 
     export default {
-        extends: Pie,                   // type of chart
+        extends: Doughnut,            // type of chart
 
-        name: "ActivityPieChart",       // name of this component
+        name: "ChartDoughnut",        // name of this component
 
         mixins: [ reactiveProp ],
 
@@ -19,18 +19,20 @@
                 chartOptions: {
                     title: {
                         display:true,
-                        text: "Completed/Pending"
+                        text: "Medium of Instruction"     // graph title
                     }
                 }
             }
         },
 
         mounted() {
-              this.renderChart(this.chartData, this.chartOptions);
+            this.renderChart(this.chartData, this.chartOptions);
         }
     }
 </script>
 
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 </style>

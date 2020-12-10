@@ -2,13 +2,13 @@
 <template>
     <div>
         <!-- Add records section (form) -->
-        <div id="add-hours" class="card">
+        <div id="add-records" class="card">
             <!-- 'Add records' title/heading for this section -->
             <h2 class="card-header text-white bg-dark">Add Records</h2>
 
             <div class="card-body">                 <!-- START of the actual form section -->
-                <!-- Display error messages section -->
-                <!-- using v-show to show this section if there are validation errors -->
+                <!-- display error messages section -->
+                <!-- used v-show to show this section if there are validation errors -->
                 <div class="alert alert-danger" v-show="errors.length > 0">
                     <!-- show a list of validation errors from form -->
                     <li v-for="error in errors">{{ error }}</li>
@@ -110,6 +110,7 @@
                 <!-- 5. Add a "Completed?" checkbox -->
                 <div class="form-check pb-3 pt-3">
                     <input class="form-check-input" type="checkbox" v-model="completed">
+
                     <label class="form-check-label">Completed?</label>
                 </div>                              <!-- END of question 5: Complete/incomplete -->
 
@@ -117,6 +118,7 @@
                 <!-- 6. Add a textarea for "Notes" -->
                 <div class="form-group">
                     <label for="textareaInput">Notes:</label>
+
                     <textarea id="textareaInput" class="form-control" rows="3" v-model="note"></textarea>
                 </div>                              <!-- END of question 6: notes text area -->
 
@@ -126,8 +128,7 @@
                     <button class="btn btn-warning mt-2" type="button" v-on:click="submit">Add record</button>
                 </div>                              <!-- END of 'Add record' submit button -->
             </div>                                  <!-- END of the actual form section -->
-        </div>                                      <!-- END of the add records section -->
-
+        </div>                                      <!-- END of the add records div -->
     </div>                                          <!-- END of template div -->
 </template>
 
